@@ -11,6 +11,11 @@ export default function Index() {
     router.replace('/tabs/posts');
   };
 
+  const handleGitHubLogin = () => {
+    const githubAuthUrl = 'https://beuma-64bbab9df83e.herokuapp.com/oauth2/authorization/github';
+    router.replace(githubAuthUrl);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -19,6 +24,10 @@ export default function Index() {
         
         <TouchableOpacity style={styles.enterButton} onPress={handleEnterApp}>
           <Text style={styles.enterButtonText}>Enter App</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.enterButton} onPress={handleGitHubLogin}>
+          <Text style={styles.enterButtonText}>Login with GitHub</Text>
         </TouchableOpacity>
       </View>
     </View>
