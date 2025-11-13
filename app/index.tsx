@@ -3,18 +3,17 @@
 */
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import * as Device from 'expo-device';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { Platform } from 'react-native';
+// import * as Device from 'expo-device';
 
 export default function Index() {
   const router = useRouter();
   const getPlatform = () => {
-    switch(Device.osName) {
-      case 'iOS': return 'ios';
-      case 'Android': return 'android'; 
-      case 'web': return 'web';
-      default: return 'android'; // fallback
-    }
+    // Use Platform.OS for reliable cross-platform detection
+    if (Platform.OS === 'web') return 'web';
+    if (Platform.OS === 'ios') return 'ios';
+    if (Platform.OS === 'android') return 'android';
+    return 'android'; // fallback
   };
 
   const handleEnterApp = () => {
