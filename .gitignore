@@ -41,8 +41,3 @@ app-example
 # generated native folders
 /ios
 /android
-<<<<<<< HEAD
-=======
-
-.package-lock.json
->>>>>>> 20435df (Made mock posts, made GET and POST API functions for later use.)
