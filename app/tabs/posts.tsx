@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useState } from "react";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,6 +16,7 @@ interface Post {
 
 export default function PostsPage() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [postsLikes, setPostsLikes] = useState<{ [key: number]: number }>(
     mockPosts.reduce((acc, post) => {
       acc[post.id] = post.likes;
@@ -55,6 +57,17 @@ export default function PostsPage() {
   return (
     <ScrollView style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.content}>
+        {/* Make a Post Button */}
+        <View style={styles.makePostContainer}>
+          <Text style={styles.makePostText}>Make a post</Text>
+          <TouchableOpacity
+            style={styles.makePostButton}
+            onPress={() => router.push('../postMaker')}
+          >
+            <Ionicons name="add" size={28} color="#fff" />
+          </TouchableOpacity>
+        </View>
+
         {mockPosts.map((post: Post) => (
           <View key={post.id} style={styles.post}>
             {/* Post Header */}
@@ -137,6 +150,28 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 12,
+  },
+  makePostContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#f5f5f5',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  makePostText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
+  makePostButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#007AFF',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   post: {
     marginBottom: 20,

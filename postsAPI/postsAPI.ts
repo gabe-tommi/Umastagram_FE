@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import { uploadImageToSupabase } from '../services/imageService';
 
 // Mock posts data
 export const mockPosts = [
@@ -46,11 +47,18 @@ export const getPosts = async (params = {}) => {
     }
 };
 
-export const createPost = async (userId: number, text: string, image: string) => {
+export const createPost = async (userId: number, text: string, imageUri?: string) => {
+    let imageUrl = '';
+    
+    // Upload image to Supabase if provided
+    if (imageUri) {
+        imageUrl = await uploadImageToSupabase(imageUri);
+    }
+    
     const postData = {
         userId,
         text,
-        image,
+        image: imageUrl,
     };
 
     const options = {
@@ -65,6 +73,11 @@ export const createPost = async (userId: number, text: string, image: string) =>
         console.log('Post created:', response.data);
         return response.data;
     } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Backend error status:', error.response?.status);
+            console.error('Backend error data:', error.response?.data);
+            throw new Error(`Backend error: ${error.response?.data?.message || error.message}`);
+        }
         console.error('Error creating post:', error);
         throw error;
     }
