@@ -8,15 +8,18 @@ export default function RootLayout() {
   const handleDeepLink = useCallback((url: string) => {
     console.log('Handling deep link:', url);
     try {
-      const { hostname, queryParams } = Linking.parse(url);
+      const { hostname, path, queryParams } = Linking.parse(url);
       
       // Check if it's the OAuth callback
-      if (hostname === 'auth' && queryParams?.token) {
+      // URL format: umastagram://auth/callback?token=...
+      if ((hostname === 'auth' || path === '/auth/callback' || path === 'auth/callback') && queryParams?.token) {
         // Store the token (you might want to use AsyncStorage or a state manager)
         console.log('Received token:', queryParams.token);
         
         // Navigate to the main app immediately
         router.replace('/tabs/posts');
+      } else {
+        console.log('Deep link not matched:', { hostname, path, queryParams });
       }
     } catch (error) {
       console.error('Error handling deep link:', error);
