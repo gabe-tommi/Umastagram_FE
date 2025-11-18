@@ -17,7 +17,7 @@ export default function RootLayout() {
         console.log('Received token:', queryParams.token);
         
         // Navigate to the main app immediately
-        router.replace('/tabs/posts');
+        router.replace('/tabs/account');
       } else {
         console.log('Deep link not matched:', { hostname, path, queryParams });
       }
