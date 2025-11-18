@@ -11,6 +11,10 @@ export default function Index() {
     router.replace('/tabs/posts');
   };
 
+  const navigateToSignup = () => {
+    router.replace('/signup');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -19,6 +23,9 @@ export default function Index() {
         
         <TouchableOpacity style={styles.enterButton} onPress={handleEnterApp}>
           <Text style={styles.enterButtonText}>Enter App</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.enterButton} onPress={navigateToSignup}>
+          <Text style={styles.enterButtonText}>Don't have an account? Signup!</Text>
         </TouchableOpacity>
       </View>
     </View>
