@@ -3,12 +3,52 @@
 */
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Platform } from 'react-native';
+// import * as Device from 'expo-device';
 
 export default function Index() {
   const router = useRouter();
+  const getPlatform = () => {
+    // Use Platform.OS for reliable cross-platform detection
+    if (Platform.OS === 'web') return 'web';
+    if (Platform.OS === 'ios') return 'ios';
+    if (Platform.OS === 'android') return 'android';
+    return 'android'; // fallback
+  };
 
   const handleEnterApp = () => {
     router.replace('/tabs/posts');
+  };
+
+  const handleGitHubLogin = () => {
+    const platform = getPlatform();
+    const githubAuthUrl = `https://beuma-64bbab9df83e.herokuapp.com/auth/github/${platform}`;
+
+    if(platform === 'web') {
+      window.location.href = githubAuthUrl;
+    } else if(platform === 'ios' || platform === 'android') {
+      // Dynamic import - only load expo-linking on mobile platforms
+      import('expo-linking').then(({ openURL }) => {
+        openURL(githubAuthUrl);
+      }).catch((error) => {
+        console.error('Failed to open URL:', error);
+      });
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    const platform = getPlatform();
+    const googleAuthUrl = `https://beuma-64bbab9df83e.herokuapp.com/auth/google/${platform}`;
+    if(platform === 'web') {
+      window.location.href = googleAuthUrl;
+    } else if(platform === 'ios' || platform === 'android') {
+      // Dynamic import - only load expo-linking on mobile platforms
+      import('expo-linking').then(({ openURL }) => {
+        openURL(googleAuthUrl);
+      }).catch((error) => {
+        console.error('Failed to open URL:', error);
+      });
+    }
   };
 
   return (
@@ -19,6 +59,14 @@ export default function Index() {
         
         <TouchableOpacity style={styles.enterButton} onPress={handleEnterApp}>
           <Text style={styles.enterButtonText}>Enter App</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.enterButton} onPress={handleGitHubLogin}>
+          <Text style={styles.enterButtonText}>Login with GitHub</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.enterButton} onPress={handleGoogleLogin}>
+          <Text style={styles.enterButtonText}>Login with Google</Text>
         </TouchableOpacity>
       </View>
     </View>
