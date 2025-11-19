@@ -6,14 +6,51 @@
   Description: Signup screen for Umastagram application
 */
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
-  const router = useRouter();
+  
+  interface SignupRequest{
+    username: string;
+    email: string;
+    password: string;
+  }
 
-  const handleSignup = () => {
+  interface SignupResponse{
+    userId: number;
+    username: string;
+    email: string;
+  }
+
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSignup = async () => {
     console.log("Signup button pressed");
-    // router.replace('/tabs/posts');
+    
+    try {
+      const response = await fetch('https://beuma-64bbab9df83e.herokuapp.com/user/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Signup failed');
+      }
+      
+      const data: SignupResponse = await response.json();
+      console.log('Signup success:', data);
+      
+      // Navigate to main app or login
+      router.replace('/tabs/posts');
+    } catch (error) {
+      console.error('Signup error:', error);
+      // Show error to user
+    }
   };
 
   const navToLogin = () => {
@@ -29,15 +66,21 @@ export default function Index() {
         <TextInput 
             placeholder="Email"
             style={styles.input}
+            value={email}
+            onChangeText={setEmail}
         />
         <TextInput 
             placeholder="Username"
             style={styles.input}
+            value={username}
+            onChangeText={setUsername}
         />
         <TextInput 
             placeholder="Password"
             style={styles.input}
             secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
         />
         <TouchableOpacity style={styles.enterButton} onPress={handleSignup}>
           <Text style={styles.enterButtonText}>Signup</Text>
