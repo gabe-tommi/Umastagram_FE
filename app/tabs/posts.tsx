@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { mockPosts } from "../../postsAPI/postsAPI";
+import { getPosts } from "../../postsAPI/postsAPI";
+// import { mockPosts } from "../../postsAPI/postsAPI";
 
 interface Post {
   id: number;
@@ -17,14 +18,36 @@ interface Post {
 export default function PostsPage() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const [postsLikes, setPostsLikes] = useState<{ [key: number]: number }>(
-    mockPosts.reduce((acc, post) => {
-      acc[post.id] = post.likes;
-      return acc;
-    }, {} as { [key: number]: number })
-  );
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [postsLikes, setPostsLikes] = useState<{ [key: number]: number }>({});
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
-  const [loadingImages, setLoadingImages] = useState<Set<number>>(new Set(mockPosts.map(p => p.id)));
+  const [loadingImages, setLoadingImages] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const fetchedPosts = await getPosts();
+        setPosts(fetchedPosts);
+        
+        // Initialize likes from fetched posts
+        const initialLikes = fetchedPosts.reduce((acc: { [key: number]: number }, post: Post) => {
+          acc[post.id] = post.likes;
+          return acc;
+        }, {});
+        setPostsLikes(initialLikes);
+        
+        // Initialize loading images
+        setLoadingImages(new Set(fetchedPosts.map((p: Post) => p.id)));
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   const handleLike = (postId: number) => {
     setLikedPosts(prev => {
@@ -68,7 +91,18 @@ export default function PostsPage() {
           </TouchableOpacity>
         </View>
 
-        {mockPosts.map((post: Post) => (
+        {/* Loading State */}
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#007AFF" />
+            <Text style={styles.loadingText}>Loading posts...</Text>
+          </View>
+        ) : posts.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No posts yet</Text>
+          </View>
+        ) : (
+          posts.map((post: Post) => (
           <View key={post.id} style={styles.post}>
             {/* Post Header */}
             <View style={styles.postHeader}>
@@ -137,7 +171,8 @@ export default function PostsPage() {
               </TouchableOpacity>
             </View>
           </View>
-        ))}
+        ))
+        )}
       </View>
     </ScrollView>
   );
@@ -241,5 +276,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     fontWeight: '500',
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {
+    fontSize: 14,
+    color: '#999',
+    marginTop: 12,
+  },
+  emptyContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: '#999',
   },
 });
