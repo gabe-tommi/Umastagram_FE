@@ -1,5 +1,8 @@
 /*
   Author: Alexangelo Orozco Gutierrez
+  Last Modified By: Armando Vega
+  Date Last Modified: 18 November 2025
+  Summary: Main entry point for Umastagram application and login screen
 */
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -22,6 +25,8 @@ export default function Index() {
 
   const navigateToSignup = () => {
     router.replace('/signup');
+  };
+
   const handleGitHubLogin = () => {
     const platform = getPlatform();
     const githubAuthUrl = `https://beuma-64bbab9df83e.herokuapp.com/auth/github/${platform}`;
@@ -62,7 +67,7 @@ export default function Index() {
         <TouchableOpacity style={styles.enterButton} onPress={handleEnterApp}>
           <Text style={styles.enterButtonText}>Enter App</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity style={styles.enterButton} onPress={navigateToSignup}>
           <Text style={styles.enterButtonText}>Don't have an account? Signup!</Text>
         </TouchableOpacity>

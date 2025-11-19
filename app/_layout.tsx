@@ -3,23 +3,6 @@ import { useEffect, useCallback } from "react";
 import * as Linking from 'expo-linking';
 
 export default function RootLayout() {
-<<<<<<< HEAD
-  return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{ animation: 'fade' }}
-        // screenOptions={{
-        //   animation: 'slide_from_right', // Options: 'slide_from_right', 'slide_from_left', 'slide_from_bottom', 'fade', 'flip', 'none'
-        // }}
-      />
-      <Stack.Screen
-        name="signup"
-        options={{ animation: 'fade' }}
-      />
-    </Stack>
-  );
-=======
   const router = useRouter();
 
   const handleDeepLink = useCallback((url: string) => {
@@ -60,6 +43,19 @@ export default function RootLayout() {
     return () => subscription.remove();
   }, [handleDeepLink]);
 
-  return <Stack />;
->>>>>>> main
+  return (
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{ animation: 'fade' }}
+        // screenOptions={{
+        //   animation: 'slide_from_right', // Options: 'slide_from_right', 'slide_from_left', 'slide_from_bottom', 'fade', 'flip', 'none'
+        // }}
+      />
+      <Stack.Screen
+        name="signup"
+        options={{ animation: 'fade' }}
+      />
+    </Stack>
+  );
 }
