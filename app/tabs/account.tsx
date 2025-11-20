@@ -1,18 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
 export default function AccountPage() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
 
   const handleLogout = () => {
     router.replace('/');
   };
   return (
     <ScrollView style={styles.container}>
-      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
+      <View style={styles.header}>
         <Text style={styles.title}>Account</Text>
       </View>
       

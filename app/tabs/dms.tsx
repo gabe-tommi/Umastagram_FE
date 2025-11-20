@@ -1,12 +1,9 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function DMsPage() {
-  const insets = useSafeAreaInsets();
-  
   return (
     <ScrollView style={styles.container}>
-      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
+      <View style={styles.header}>
         <Text style={styles.title}>Messages</Text>
       </View>
       <View style={styles.content}>
