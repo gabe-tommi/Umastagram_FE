@@ -5,12 +5,35 @@
   Summary: Main entry point for Umastagram application and login screen
 */
 import { useRouter } from 'expo-router';
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Platform } from 'react-native';
+import { Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from 'react';
+import { storage } from '../lib/storage';
 // import * as Device from 'expo-device';
 
 export default function Index() {
   const router = useRouter();
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [onModalClose, setOnModalClose] = useState<(() => void) | null>(null);
+
+  const showAlert = (title: string, message: string, onOk?: () => void) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setOnModalClose(() => onOk || null);
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    if (onModalClose) {
+      onModalClose();
+    }
+  };
+
   const getPlatform = () => {
     // Use Platform.OS for reliable cross-platform detection
     if (Platform.OS === 'web') return 'web';
@@ -21,6 +44,35 @@ export default function Index() {
 
   const handleEnterApp = () => {
     router.replace('/tabs/posts');
+  };
+
+  const handleLogin = async () => {
+    if(!username || !password) {
+      showAlert('Error', 'Please enter both username and password');
+      return;
+    }
+
+    try{
+      const response = await fetch('https://beuma-64bbab9df83e.herokuapp.com/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await response.json();
+      if(!response.ok) {
+        showAlert('Login Failed', data.error || 'Invalid username or password');
+        return;
+      }
+
+      await storage.saveAuth(data.token, data.userId, data.username, data.email);
+      showAlert('Success', data.message || 'Login successful', () => router.replace('/tabs/account'));
+    } catch(error){
+      console.error('Login error:', error);
+      showAlert('Error', 'An error occurred during login. Please try again.');
+    }
+
   };
 
   const navigateToSignup = () => {
@@ -60,6 +112,23 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
+      {/* Custom Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleModalClose}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{modalTitle}</Text>
+            <Text style={styles.modalMessage}>{modalMessage}</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={handleModalClose}>
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.content}>
         <Text style={styles.title}>Umastagram</Text>
         <Text style={styles.subtitle}>Welcome to Umastagram!</Text>
@@ -67,7 +136,22 @@ export default function Index() {
         <TouchableOpacity style={styles.enterButton} onPress={handleEnterApp}>
           <Text style={styles.enterButtonText}>Enter App</Text>
         </TouchableOpacity>
-
+        <TextInput 
+            placeholder="Username"
+            style={styles.input}
+            value={username}
+            onChangeText={setUsername}
+        />
+        <TextInput 
+            placeholder="Password"
+            style={styles.input}
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+        />
+        <TouchableOpacity style={styles.enterButton} onPress={handleLogin}>
+          <Text style={styles.enterButtonText}>Login</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.enterButton} onPress={navigateToSignup}>
           <Text style={styles.enterButtonText}>Don't have an account? Signup!</Text>
         </TouchableOpacity>
@@ -115,6 +199,57 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
   },
   enterButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+   input: { // taken from react native docs
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 24,
+    minWidth: 280,
+    maxWidth: 400,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  modalMessage: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 24,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  modalButton: {
+    backgroundColor: '#007AFF',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    alignItems: 'center',
+  },
+  modalButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',

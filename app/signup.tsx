@@ -7,7 +7,7 @@
 */
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   
@@ -27,9 +27,34 @@ export default function Index() {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [onModalClose, setOnModalClose] = useState<(() => void) | null>(null);
+
+  // Custom alert function using Modal
+  const showAlert = (title: string, message: string, onOk?: () => void) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setOnModalClose(() => onOk || null);
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    if (onModalClose) {
+      onModalClose();
+    }
+  };
 
   const handleSignup = async () => {
     console.log("Signup button pressed");
+    
+    // Basic validation
+    if (!email || !username || !password) {
+      showAlert('Error', 'Please fill in all fields');
+      return;
+    }
     
     try {
       const response = await fetch('https://beuma-64bbab9df83e.herokuapp.com/user/signup', {
@@ -38,18 +63,26 @@ export default function Index() {
         body: JSON.stringify({ username, email, password })
       });
       
+      const data = await response.json();
+      
       if (!response.ok) {
-        throw new Error('Signup failed');
+        // Show error message from backend
+        const errorMessage = data.error || 'Signup failed';
+        showAlert('Signup Failed', errorMessage);
+        return;
       }
       
-      const data: SignupResponse = await response.json();
       console.log('Signup success:', data);
       
-      // Navigate to main app or login
-      router.replace('/tabs/posts');
+      // Show success message and navigate to login
+      showAlert(
+        'Signup Successful!', 
+        `Welcome, ${data.username}! You can now log in.`,
+        () => router.replace('/')
+      );
     } catch (error) {
       console.error('Signup error:', error);
-      // Show error to user
+      showAlert('Error', 'Network error. Please try again.');
     }
   };
 
@@ -59,6 +92,24 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
+      {/* Custom Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleModalClose}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{modalTitle}</Text>
+            <Text style={styles.modalMessage}>{modalMessage}</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={handleModalClose}>
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <View style={styles.content}>
         <Text style={styles.title}>Umastagram</Text>
         <Text style={styles.subtitle}>Welcome to Umastagram!</Text>
@@ -133,5 +184,50 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 24,
+    minWidth: 280,
+    maxWidth: 400,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  modalMessage: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 24,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  modalButton: {
+    backgroundColor: '#007AFF',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
