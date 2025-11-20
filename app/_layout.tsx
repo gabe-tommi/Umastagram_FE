@@ -1,6 +1,6 @@
-import { Stack, useRouter } from "expo-router";
-import { useEffect, useCallback } from "react";
 import * as Linking from 'expo-linking';
+import { Stack, useRouter } from "expo-router";
+import { useCallback, useEffect } from "react";
 
 export default function RootLayout() {
   const router = useRouter();
@@ -43,5 +43,5 @@ export default function RootLayout() {
     return () => subscription.remove();
   }, [handleDeepLink]);
 
-  return <Stack />;
+  return <Stack screenOptions={{ headerShown: false }} />;
 }

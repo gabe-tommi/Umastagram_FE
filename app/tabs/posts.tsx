@@ -28,7 +28,8 @@ export default function PostsPage() {
     const fetchPosts = async () => {
       try {
         const fetchedPosts = await getPosts();
-        setPosts(fetchedPosts);
+        // Reverse posts so newest posts appear first
+        setPosts(fetchedPosts.reverse());
         
         // Initialize likes from fetched posts
         const initialLikes = fetchedPosts.reduce((acc: { [key: number]: number }, post: Post) => {
@@ -79,7 +80,7 @@ export default function PostsPage() {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
         <Text style={styles.title}>Umastagram</Text>
       </View>
       <View style={styles.content}>
@@ -186,6 +187,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  header: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#333',
+    textAlign: 'center',
+  },
   content: {
     padding: 12,
   },
@@ -215,47 +231,70 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    backgroundColor: '#fff',
+    paddingBottom: 16,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#333',
+  postHeader: {
+    marginBottom: 12,
   },
-  content: {
-    flex: 1,
-    padding: 16,
-  },
-  welcomeText: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#333',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 32,
-  },
-  postPlaceholder: {
-    padding: 40,
+  userInfo: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f8f9fa',
-    borderRadius: 12,
-    marginTop: 20,
   },
-  placeholderText: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: '#666',
-    marginBottom: 8,
+  avatar: {
+    marginRight: 12,
   },
-  placeholderSubtext: {
+  username: {
     fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+  },
+  timestamp: {
+    fontSize: 12,
     color: '#999',
-    textAlign: 'center',
+    marginTop: 2,
+  },
+  postText: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 12,
+    lineHeight: 22,
+  },
+  imageContainer: {
+    width: '100%',
+    aspectRatio: 1,
+    marginBottom: 12,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  loadingSpinner: {
+    position: 'absolute',
+  },
+  postImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
+  },
+  postActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+  },
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
+  actionText: {
+    marginLeft: 6,
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
   },
   loadingContainer: {
     justifyContent: 'center',
