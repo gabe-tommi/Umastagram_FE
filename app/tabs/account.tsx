@@ -1,13 +1,29 @@
 import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from 'expo-router';
+import { useState, useEffect } from 'react';
+import { storage } from '../../lib/storage';
 
 export default function AccountPage() {
   const router = useRouter();
+  const [username, setUsername] = useState('');
 
-  const handleLogout = () => {
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    const auth = await storage.getAuth();
+    if (auth?.username) {
+      setUsername(auth.username);
+    }
+  };
+
+  const handleLogout = async () => {
+    await storage.clearAuth();
     router.replace('/');
   };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -20,7 +36,7 @@ export default function AccountPage() {
           <View style={styles.avatarPlaceholder}>
             <Ionicons name="person" size={40} color="#666" />
           </View>
-          <Text style={styles.username}>@username</Text>
+          <Text style={styles.username}>{username}</Text>
         </View>
 
         {/* Settings Section */}
