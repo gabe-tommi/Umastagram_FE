@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { readAsStringAsync } from 'expo-file-system/legacy';
 import * as ImagePicker from 'expo-image-picker';
+import { Platform } from 'react-native';
 
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -39,6 +40,31 @@ export const pickImage = async () => {
 };
 
 /**
+ * Get MIME type from image URI
+ */
+const getMimeType = (uri: string): string => {
+  const extension = uri.split('.').pop()?.toLowerCase() || 'jpg';
+  const mimeTypes: { [key: string]: string } = {
+    'jpg': 'image/jpeg',
+    'jpeg': 'image/jpeg',
+    'png': 'image/png',
+    'gif': 'image/gif',
+    'webp': 'image/webp',
+    'bmp': 'image/bmp',
+    'svg': 'image/svg+xml',
+  };
+  return mimeTypes[extension] || 'image/jpeg';
+};
+
+/**
+ * Get file extension from MIME type and URI
+ */
+const getFileExtension = (uri: string): string => {
+  const extension = uri.split('.').pop()?.toLowerCase() || 'jpg';
+  return extension;
+};
+
+/**
  * Upload image to Supabase Storage
  * @param imageUri - Local URI of the image
  * @returns Public URL of the uploaded image
@@ -47,28 +73,33 @@ export const uploadImageToSupabase = async (
   imageUri: string
 ): Promise<string> => {
   try {
-    // Generate unique filename
+    // Generate unique filename with proper extension
     const timestamp = Date.now();
-    const fileName = `${timestamp}.jpg`;
+    const extension = getFileExtension(imageUri);
+    const fileName = `${timestamp}.${extension}`;
+    const mimeType = getMimeType(imageUri);
 
-    // Read file as base64
-    const base64Data = await readAsStringAsync(imageUri, {
-      encoding: 'base64',
-    });
+    let fileData: Uint8Array | Blob;
 
-    // Supabase expects the data as a string (base64) for file uploads
-    // or we can pass it as-is and let it handle the encoding
+    if (Platform.OS === 'web') {
+      // On web, fetch the image as a blob
+      const response = await fetch(imageUri);
+      fileData = await response.blob();
+    } else {
+      // On mobile, read as base64 and convert to Uint8Array
+      const base64Data = await readAsStringAsync(imageUri, {
+        encoding: 'base64',
+      });
+      fileData = new Uint8Array(
+        atob(base64Data).split('').map(c => c.charCodeAt(0))
+      );
+    }
+
     const { data, error } = await supabase.storage
       .from(BUCKET_NAME)
-      .upload(fileName, 
-        // Convert base64 string to actual binary data
-        new Uint8Array(
-          atob(base64Data).split('').map(c => c.charCodeAt(0))
-        ),
-        {
-          contentType: 'image/jpeg',
-        }
-      );
+      .upload(fileName, fileData, {
+        contentType: mimeType,
+      });
 
     if (error) {
       console.error('Supabase upload error details:', error);

@@ -25,21 +25,19 @@ export default function PostMaker() {
   };
 
   const handleSubmit = async () => {
+    console.log('Submit button clicked');
     setIsLoading(true);
     try {
       // Use a placeholder userId for now (you can replace with actual user ID from auth)
       const userId = 1;
       
+      console.log('Creating post with:', { userId, postText, hasImage: !!selectedImage });
       // Call createPost with text and image URI
       await createPost(userId, postText, selectedImage || undefined);
       
-      // Success - navigate back to posts
-      Alert.alert('Success', 'Post created successfully!', [
-        {
-          text: 'OK',
-          onPress: () => router.replace('../tabs/posts'),
-        },
-      ]);
+      console.log('Post created successfully, navigating...');
+      // Success - navigate back to posts directly without popup
+      router.replace('../tabs/posts');
     } catch (error) {
       // Error handling for both image upload and post creation
       let errorMessage = 'Failed to create post';
@@ -117,9 +115,9 @@ export default function PostMaker() {
 
         {/* Submit Button */}
         <TouchableOpacity
-          style={[styles.submitButton, (!postText && !selectedImage || isLoading) && styles.submitButtonDisabled]}
+          style={[styles.submitButton, ((!postText && !selectedImage) || isLoading) && styles.submitButtonDisabled]}
           onPress={handleSubmit}
-          disabled={!postText && !selectedImage || isLoading}
+          disabled={(!postText && !selectedImage) || isLoading}
         >
           {isLoading ? (
             <ActivityIndicator color="#fff" />
