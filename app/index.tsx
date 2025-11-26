@@ -6,8 +6,9 @@
 */
 import { useRouter } from 'expo-router';
 import { Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { storage } from '../lib/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import * as Device from 'expo-device';
 
 export default function Index() {
@@ -19,6 +20,44 @@ export default function Index() {
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [onModalClose, setOnModalClose] = useState<(() => void) | null>(null);
+
+  useEffect(() => {
+    handleWebOAuthCallback();
+  }, []);
+
+  const handleWebOAuthCallback = async () => {
+    // Web-specific: Check URL fragment for OAuth callback data
+    console.log('Checking for web OAuth callback in index');
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash.includes('token=')) {
+        console.log('Web OAuth callback detected in index:', hash);
+        
+        // Parse fragment parameters
+        const params = new URLSearchParams(hash.substring(1)); // Remove '#'
+        const token = params.get('token');
+        const userId = params.get('userId');
+        const username = params.get('username');
+        const email = params.get('email');
+
+        if (token && userId && email) {
+          // Store auth data
+          await AsyncStorage.multiSet([
+            ['@auth:token', token],
+            ['@auth:userId', userId],
+            ['@auth:username', username || ''],
+            ['@auth:email', email],
+          ]);
+
+          // Clear the hash from URL
+          window.history.replaceState(null, '', window.location.pathname);
+          
+          console.log('OAuth data stored, navigating to account from index');
+          router.replace('/tabs/account');
+        }
+      }
+    }
+  };
 
   const showAlert = (title: string, message: string, onOk?: () => void) => {
     setModalTitle(title);
