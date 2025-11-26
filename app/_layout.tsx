@@ -1,22 +1,31 @@
 import { Stack, useRouter } from "expo-router";
 import { useEffect, useCallback } from "react";
 import * as Linking from 'expo-linking';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from "../lib/storage";
 
 export default function RootLayout() {
   const router = useRouter();
 
-  const handleDeepLink = useCallback((url: string) => {
+  const handleDeepLink = useCallback(async (url: string) => {
     console.log('Handling deep link:', url);
     try {
       const { hostname, path, queryParams } = Linking.parse(url);
       
       // Check if it's the OAuth callback
-      // URL format: umastagram://auth/callback?token=...
+      // URL format: umastagram://auth/callback?token=...&userId=...&email=...
       if ((hostname === 'auth' || path === '/auth/callback' || path === 'auth/callback') && queryParams?.token) {
-        // Store the token (you might want to use AsyncStorage or a state manager)
-        console.log('Received token:', queryParams.token);
+        console.log('Received OAuth callback:', queryParams);
         
-        // Navigate to the main app immediately
+        // Store only token, userId, and email individually
+        await AsyncStorage.multiSet([
+          ['@auth:token', queryParams.token as string],
+          ['@auth:userId', String(queryParams.userId)],
+          ['@auth:username', queryParams.username as string],
+          ['@auth:email', queryParams.email as string],
+        ]);
+        
+        // Navigate to the main app
         router.replace('/tabs/account');
       } else {
         console.log('Deep link not matched:', { hostname, path, queryParams });
