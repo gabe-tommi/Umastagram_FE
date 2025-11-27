@@ -6,9 +6,8 @@
 */
 import { useRouter } from 'expo-router';
 import { Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { storage } from '../lib/storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 // import * as Device from 'expo-device';
 
 export default function Index() {
