@@ -1,9 +1,9 @@
-import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { storage } from "../../lib/storage";
 import { getPosts } from "../../postsAPI/postsAPI";
 // import { mockPosts } from "../../postsAPI/postsAPI";
 
@@ -79,6 +79,15 @@ export default function PostsPage() {
     return `${diffDays}d ago`;
   };
 
+  const handleMakePost = async () => {
+    const auth = await storage.getAuth();
+    if (!auth?.userId) {
+      Alert.alert('Not Logged In', 'You must log in to create a post');
+      return;
+    }
+    router.push('../postMaker');
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -90,7 +99,7 @@ export default function PostsPage() {
           <Text style={styles.makePostText}>Make a post</Text>
           <TouchableOpacity
             style={styles.makePostButton}
-            onPress={() => router.push('../postMaker')}
+            onPress={handleMakePost}
           >
             <Ionicons name="add" size={28} color="#fff" />
           </TouchableOpacity>

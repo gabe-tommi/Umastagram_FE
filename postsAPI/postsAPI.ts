@@ -56,7 +56,7 @@ export const createPost = async (userId: number, text: string, imageUri?: string
     }
     
     const postData = {
-        userId: 6,  // Hardcoded userId
+        userId,  // Use the passed userId parameter
         text,
         image: imageUrl,
     };

@@ -1,9 +1,9 @@
-import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { storage } from '../lib/storage';
 import { createPost } from '../postsAPI/postsAPI';
 import { pickImage } from '../services/imageService';
 
@@ -13,6 +13,18 @@ export default function PostMaker() {
   const [postText, setPostText] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [userId, setUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    const auth = await storage.getAuth();
+    if (auth?.userId) {
+      setUserId(auth.userId);
+    }
+  };
 
   const handlePickImage = async () => {
     try {
@@ -29,8 +41,9 @@ export default function PostMaker() {
     console.log('Submit button clicked');
     setIsLoading(true);
     try {
-      // Use a placeholder userId for now (you can replace with actual user ID from auth)
-      const userId = 1;
+      if (!userId) {
+        throw new Error('User ID not found. Please log in again.');
+      }
       
       console.log('Creating post with:', { userId, postText, hasImage: !!selectedImage });
       // Call createPost with text and image URI

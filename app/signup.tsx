@@ -1,18 +1,30 @@
 /*
-  Author: Alexangelo Orozco Gutierrez
+  Author: Armando Vega
+  Date Created: 18 November 2025
   Last Modified By: Armando Vega
   Date Last Modified: 18 November 2025
-  Summary: Main entry point for Umastagram application and login screen
+  Description: Signup screen for Umastagram application
 */
 import { useRouter } from 'expo-router';
-import { Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useState } from 'react';
-import { storage } from '../lib/storage';
-// import * as Device from 'expo-device';
+import { Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
-  const router = useRouter();
+  
+  interface SignupRequest{
+    username: string;
+    email: string;
+    password: string;
+  }
 
+  interface SignupResponse{
+    userId: number;
+    username: string;
+    email: string;
+  }
+
+  const router = useRouter();
+  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -20,6 +32,7 @@ export default function Index() {
   const [modalMessage, setModalMessage] = useState('');
   const [onModalClose, setOnModalClose] = useState<(() => void) | null>(null);
 
+  // Custom alert function using Modal
   const showAlert = (title: string, message: string, onOk?: () => void) => {
     setModalTitle(title);
     setModalMessage(message);
@@ -34,80 +47,47 @@ export default function Index() {
     }
   };
 
-  const getPlatform = () => {
-    // Use Platform.OS for reliable cross-platform detection
-    if (Platform.OS === 'web') return 'web';
-    if (Platform.OS === 'ios') return 'ios';
-    if (Platform.OS === 'android') return 'android';
-    return 'android'; // fallback
-  };
-
-  const handleEnterApp = () => {
-    router.replace('/tabs/posts');
-  };
-
-  const handleLogin = async () => {
-    if(!username || !password) {
-      showAlert('Error', 'Please enter both username and password');
+  const handleSignup = async () => {
+    console.log("Signup button pressed");
+    
+    // Basic validation
+    if (!email || !username || !password) {
+      showAlert('Error', 'Please fill in all fields');
       return;
     }
-
-    try{
-      const response = await fetch('https://beuma-64bbab9df83e.herokuapp.com/user/login', {
+    
+    try {
+      const response = await fetch('https://beuma-64bbab9df83e.herokuapp.com/user/signup', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
       });
+      
       const data = await response.json();
-      if(!response.ok) {
-        showAlert('Login Failed', data.error || 'Invalid username or password');
+      
+      if (!response.ok) {
+        // Show error message from backend
+        const errorMessage = data.error || 'Signup failed';
+        showAlert('Signup Failed', errorMessage);
         return;
       }
-
-      await storage.saveAuth(data.token, data.userId, data.username, data.email);
-      showAlert('Success', data.message || 'Login successful', () => router.replace('/tabs/account'));
-    } catch(error){
-      console.error('Login error:', error);
-      showAlert('Error', 'An error occurred during login. Please try again.');
-    }
-
-  };
-
-  const navigateToSignup = () => {
-    router.replace('/signup');
-  };
-
-  const handleGitHubLogin = () => {
-    const platform = getPlatform();
-    const githubAuthUrl = `https://beuma-64bbab9df83e.herokuapp.com/auth/github/${platform}`;
-
-    if(platform === 'web') {
-      window.location.href = githubAuthUrl;
-    } else if(platform === 'ios' || platform === 'android') {
-      // Dynamic import - only load expo-linking on mobile platforms
-      import('expo-linking').then(({ openURL }) => {
-        openURL(githubAuthUrl);
-      }).catch((error) => {
-        console.error('Failed to open URL:', error);
-      });
+      
+      console.log('Signup success:', data);
+      
+      // Show success message and navigate to login
+      showAlert(
+        'Signup Successful!', 
+        `Welcome, ${data.username}! You can now log in.`,
+        () => router.replace('/')
+      );
+    } catch (error) {
+      console.error('Signup error:', error);
+      showAlert('Error', 'Network error. Please try again.');
     }
   };
 
-  const handleGoogleLogin = () => {
-    const platform = getPlatform();
-    const googleAuthUrl = `https://beuma-64bbab9df83e.herokuapp.com/auth/google/${platform}`;
-    if(platform === 'web') {
-      window.location.href = googleAuthUrl;
-    } else if(platform === 'ios' || platform === 'android') {
-      // Dynamic import - only load expo-linking on mobile platforms
-      import('expo-linking').then(({ openURL }) => {
-        openURL(googleAuthUrl);
-      }).catch((error) => {
-        console.error('Failed to open URL:', error);
-      });
-    }
+  const navToLogin = () => {
+    router.replace('/');
   };
 
   return (
@@ -129,13 +109,17 @@ export default function Index() {
           </View>
         </View>
       </Modal>
+
       <View style={styles.content}>
         <Text style={styles.title}>Umastagram</Text>
         <Text style={styles.subtitle}>Welcome to Umastagram!</Text>
         
-        <TouchableOpacity style={styles.enterButton} onPress={handleEnterApp}>
-          <Text style={styles.enterButtonText}>Enter App</Text>
-        </TouchableOpacity>
+        <TextInput 
+            placeholder="Email"
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+        />
         <TextInput 
             placeholder="Username"
             style={styles.input}
@@ -149,19 +133,11 @@ export default function Index() {
             value={password}
             onChangeText={setPassword}
         />
-        <TouchableOpacity style={styles.enterButton} onPress={handleLogin}>
-          <Text style={styles.enterButtonText}>Login</Text>
+        <TouchableOpacity style={styles.enterButton} onPress={handleSignup}>
+          <Text style={styles.enterButtonText}>Signup</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.enterButton} onPress={navigateToSignup}>
-          <Text style={styles.enterButtonText}>Don't have an account? Signup!</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.enterButton} onPress={handleGitHubLogin}>
-          <Text style={styles.enterButtonText}>Login with GitHub</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.enterButton} onPress={handleGoogleLogin}>
-          <Text style={styles.enterButtonText}>Login with Google</Text>
+        <TouchableOpacity style={styles.enterButton} onPress={navToLogin}>
+          <Text style={styles.enterButtonText}>Back to login</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -203,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-   input: { // taken from react native docs
+  input: { // taken from react native docs
     height: 40,
     margin: 12,
     borderWidth: 1,
