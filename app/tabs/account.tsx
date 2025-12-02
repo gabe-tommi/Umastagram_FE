@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useRouter } from 'expo-router';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { storage } from '../../lib/storage';
 
 export default function AccountPage() {
@@ -18,6 +18,7 @@ export default function AccountPage() {
 
   const loadUserData = async () => {
     const auth = await storage.getAuth();
+    console.log('User Auth Data:', auth);
     if (auth?.username) {
       setUsername(auth.username);
     }
