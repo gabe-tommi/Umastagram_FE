@@ -28,14 +28,14 @@ export default function RootLayout() {
           const username = params.get('username');
           const email = params.get('email');
 
-          if (token && userId && email) {
-            // Store auth data
-            await AsyncStorage.multiSet([
-              ['@auth:token', token],
-              ['@auth:userId', userId],
-              ['@auth:username', username || ''],
-              ['@auth:email', email],
-            ]);
+          if (token && userId) {
+            // Use storage helper to ensure consistent key usage
+            await storage.saveAuth(
+              token,
+              Number(userId),
+              username || '',
+              email || ''
+            );
 
             // Clear the hash from URL
             window.history.replaceState(null, '', window.location.pathname);
@@ -74,13 +74,15 @@ export default function RootLayout() {
       if ((hostname === 'auth' || path === '/auth/callback' || path === 'auth/callback') && queryParams?.token) {
         console.log('Received OAuth callback:', queryParams);
         
-        // Store only token, userId, and email individually
-        await AsyncStorage.multiSet([
-          ['@auth:token', queryParams.token as string],
-          ['@auth:userId', String(queryParams.userId)],
-          ['@auth:username', queryParams.username as string],
-          ['@auth:email', queryParams.email as string],
-        ]);
+        // Use storage helper to ensure consistent key usage
+        await storage.saveAuth(
+          queryParams.token as string,
+          Number(queryParams.userId),
+          (queryParams.username as string) || '',
+          (queryParams.email as string) || ''
+        );
+        
+        console.log('OAuth data saved successfully');
         
         // Navigate to the main app
         router.replace('/tabs/account');
