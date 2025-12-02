@@ -28,13 +28,13 @@ export default function RootLayout() {
           const username = params.get('username');
           const email = params.get('email');
 
-          if (token && userId && email) {
+          if (token && userId) {
             // Use storage helper to ensure consistent key usage
             await storage.saveAuth(
               token,
               Number(userId),
               username || '',
-              email
+              email || ''
             );
 
             // Clear the hash from URL
@@ -78,8 +78,8 @@ export default function RootLayout() {
         await storage.saveAuth(
           queryParams.token as string,
           Number(queryParams.userId),
-          queryParams.username as string,
-          queryParams.email as string
+          (queryParams.username as string) || '',
+          (queryParams.email as string) || ''
         );
         
         console.log('OAuth data saved successfully');
