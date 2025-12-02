@@ -7,6 +7,7 @@ import { storage } from '../lib/storage';
 import { createPost } from '../postsAPI/postsAPI';
 import { pickImage } from '../services/imageService';
 
+
 export default function PostMaker() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
