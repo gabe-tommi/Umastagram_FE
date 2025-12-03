@@ -1,9 +1,8 @@
-import { Stack, useRouter, usePathname, SplashScreen } from "expo-router";
-import { useEffect, useCallback, useState } from "react";
 import * as Linking from 'expo-linking';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { storage } from "../lib/storage";
+import { SplashScreen, Stack, usePathname, useRouter } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
 import { Platform } from 'react-native';
+import { storage } from "../lib/storage";
 
 // Keep the splash screen visible while we check auth
 SplashScreen.preventAutoHideAsync();
@@ -124,7 +123,10 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Stack.Screen
         name="index"
         options={{ animation: 'fade' }}
