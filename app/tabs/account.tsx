@@ -57,9 +57,21 @@ export default function AccountPage() {
       console.log('Response from username change:', data);
       if (response.ok) {
         console.log('Username changed successfully');
-        showAlert('Success', 'Username changed!', () => console.log('User clicked OK'));  
-        await storage.setItem('auth', JSON.stringify({ username : data.username.trim() }));
-        loadUserData();
+        
+        // Update stored auth with new username
+        const auth = await storage.getAuth();
+        if (auth) {
+          await storage.saveAuth(
+            auth.token || '',
+            auth.userId || 0,
+            data.username,
+            auth.email || ''
+          );
+        }
+        
+        setUsername(data.username); // Update display immediately
+        setModalUsername('');
+        showAlert('Success', 'Username changed!');
         setModalVisible(false);
         if (onModalClose) {
           onModalClose();
