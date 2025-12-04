@@ -1,12 +1,13 @@
 import { useLocalSearchParams} from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import React from "react";
 
 export default function ProfilePage(){
   const { username } = useLocalSearchParams<{ username: string }>();
+
   return (
     <View style={styles.container}>
-      <text>user:{username}</text>
+      <Text> User: { username } </Text>
     </View>
   );
 

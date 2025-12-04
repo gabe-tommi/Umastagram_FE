@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {router} from "expo-router";
 
-export function SearchPage(): JSX.Element {
+export default function SearchPage(): JSX.Element {
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<string[]>([]);
@@ -34,7 +34,7 @@ export function SearchPage(): JSX.Element {
 
     function profileSelect(username: string): void {
         // @ts-ignore
-        router.replace('/profile/{username}', {username: username});
+        router.replace(`/profile?username=${username}`);
     }
 
     const renderItem = ({item}: { item: string }) => (
