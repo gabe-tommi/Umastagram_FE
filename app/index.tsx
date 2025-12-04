@@ -220,12 +220,11 @@ export default function Index() {
       </Modal>
       <View style={styles.content}>
         <View style={styles.innerContainer}>
-          <Text style={styles.title}>Umastagram</Text>
-          <Text style={styles.subtitle}>Welcome to Umastagram!</Text>
+          <Image source={require('../assets/images/uhd_logo.png')} style={styles.logo} />
           
-          <TouchableOpacity style={styles.enterButton} onPress={handleEnterApp}>
+          {/* <TouchableOpacity style={styles.enterButton} onPress={handleEnterApp}>
             <Text style={styles.enterButtonText}>Enter App</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TextInput 
               placeholder="Username"
               style={styles.input}
@@ -292,7 +291,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     width: '100%',
     gap: 16,
-    backgroundColor: '#F7FFED',
+    backgroundColor: '#ffccdfff',
     padding: 32,
     borderRadius: 12,
     maxWidth: 650,
@@ -303,6 +302,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 8,
+  },
+  logo: {
+    flex: 1,
+    width: '100%',
+    maxHeight: 100,
+    resizeMode: 'contain',
   },
   subtitle: {
     fontSize: 16,
