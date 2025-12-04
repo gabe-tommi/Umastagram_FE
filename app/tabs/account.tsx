@@ -11,6 +11,7 @@ export default function AccountPage() {
   const [modalTitle, setModalTitle] = useState('Set Your Username!');
   const [modalMessage, setModalMessage] = useState('');
   const [onModalClose, setOnModalClose] = useState<(() => void) | null>(null);
+  const [modalUsername, setModalUsername] = useState('');
 
   useEffect(() => {
     loadUserData();
@@ -37,7 +38,7 @@ export default function AccountPage() {
   };
 
   const handleModalClose = async () => {
-    if (!username.trim()) {
+    if (!modalUsername.trim()) {
       setModalMessage('Username cannot be empty. Please enter a valid username.');
       return;
     }
@@ -49,15 +50,28 @@ export default function AccountPage() {
         },
         body: JSON.stringify({
           token: (await storage.getAuth())?.token,
-          newUsername: username.trim(),
+          newUsername: modalUsername.trim(),
         }),
       });
       const data = await response.json();
       console.log('Response from username change:', data);
       if (response.ok) {
         console.log('Username changed successfully');
-        showAlert('Success', 'Username changed!', () => console.log('User clicked OK'));  
-        await storage.setItem('auth', JSON.stringify({ username : username.trim() }));
+        
+        // Update stored auth with new username
+        const auth = await storage.getAuth();
+        if (auth) {
+          await storage.saveAuth(
+            auth.token || '',
+            auth.userId || 0,
+            data.username,
+            auth.email || ''
+          );
+        }
+        
+        setUsername(data.username); // Update display immediately
+        setModalUsername('');
+        showAlert('Success', 'Username changed!');
         setModalVisible(false);
         if (onModalClose) {
           onModalClose();
@@ -98,8 +112,8 @@ export default function AccountPage() {
             <Text style={styles.modalMessage}>{modalMessage}</Text>
             <TextInput
               style={styles.input}
-              value={username}
-              onChangeText={setUsername}
+              value={modalUsername}
+              onChangeText={setModalUsername}
               placeholder="Enter your username"
             />
             <TouchableOpacity style={styles.modalButton} onPress={handleModalClose}>
