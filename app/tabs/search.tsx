@@ -34,7 +34,7 @@ export default function SearchPage(): JSX.Element {
 
     function profileSelect(username: string): void {
         // @ts-ignore
-        router.replace(`/profile?username=${username}`);
+        router.replace(`/profile?username=${username}`, {username: username});
     }
 
     const renderItem = ({item}: { item: string }) => (
