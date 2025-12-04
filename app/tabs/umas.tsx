@@ -1,11 +1,19 @@
-import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface Uma {
   id: number;
-  umaName: string;
-  umaImageLink: string;
+  umaId?: number;
+  name: string;
+  imagePath: string;
+  umaName?: string;
+  umaImageLink?: string;
+  umaBirthday?: string;
+  funFact?: string;
+  umaIcon?: string;
+  umaIconLink?: string;
+  umaBio?: string;
 }
 
 export default function UmasScreen() {
@@ -46,13 +54,19 @@ export default function UmasScreen() {
   const renderUmaItem = ({ item }: { item: Uma }) => (
     <TouchableOpacity
       style={styles.umaCard}
-      onPress={() => handleUmaPress(item.id)}
+      onPress={() => handleUmaPress(item.id || item.umaId || 0)}
     >
       <Image
-        source={{ uri: item.umaImageLink }}
-        style={styles.umaImage}
+        source={{ uri: item.umaIcon || item.umaIconLink || item.imagePath }}
+        style={styles.profileImage}
+        resizeMode="cover"
       />
-      <Text style={styles.umaName}>{item.umaName}</Text>
+      <View style={styles.cardContent}>
+        <Text style={styles.umaName}>{item.name || item.umaName || 'Unknown'}</Text>
+        {item.umaBio && (
+          <Text style={styles.umaBio} numberOfLines={2}>{item.umaBio}</Text>
+        )}
+      </View>
     </TouchableOpacity>
   );
 
@@ -81,10 +95,9 @@ export default function UmasScreen() {
       <FlatList
         data={umas}
         renderItem={renderUmaItem}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={2}
-        columnWrapperStyle={styles.columnWrapper}
+        keyExtractor={(item) => (item.id || item.umaId || '').toString()}
         contentContainerStyle={styles.listContent}
+        scrollEnabled={true}
       />
     </View>
   );
@@ -104,8 +117,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   listContent: {
-    paddingHorizontal: 8,
+    paddingHorizontal: 16,
     paddingBottom: 20,
+    paddingTop: 8,
   },
   columnWrapper: {
     justifyContent: 'space-between',
@@ -113,16 +127,28 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   umaCard: {
-    flex: 1,
-    marginHorizontal: 4,
-    borderRadius: 8,
-    overflow: 'hidden',
+    flexDirection: 'row',
     backgroundColor: '#fff',
+    borderRadius: 12,
+    marginVertical: 8,
+    overflow: 'hidden',
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    alignItems: 'center',
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    backgroundColor: '#e0e0e0',
+    flexShrink: 0,
+  },
+  cardContent: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   umaImage: {
     width: '100%',
@@ -130,11 +156,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0e0e0',
   },
   umaName: {
-    padding: 12,
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '700',
     color: '#333',
-    textAlign: 'center',
+    marginBottom: 4,
+  },
+  umaBio: {
+    fontSize: 13,
+    color: '#666',
+    lineHeight: 18,
   },
   errorText: {
     fontSize: 16,

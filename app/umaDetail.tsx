@@ -1,15 +1,19 @@
-import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface UmaDetail {
   umaId: number;
   umaName: string;
   umaImageLink: string;
+  umaIconLink?: string;
+  umaBirthday?: string;
+  umaBirthDate?: string;
+  funFact?: string;
+  umaBio?: string;
   umaHeight?: string;
   umaWeight?: string;
-  umaBirthDate?: string;
   umaAbility?: string;
   umaDescription?: string;
   [key: string]: any;
@@ -83,18 +87,35 @@ export default function UmaDetailScreen() {
       <Image
         source={{ uri: uma.umaImageLink }}
         style={styles.heroImage}
+        resizeMode="contain"
       />
 
       <View style={styles.content}>
-        <Text style={styles.name}>{uma.umaName}</Text>
+        <View style={styles.profileSection}>
+          {uma.umaIconLink && (
+            <Image
+              source={{ uri: uma.umaIconLink }}
+              style={styles.profileIcon}
+              resizeMode="contain"
+            />
+          )}
+          <Text style={styles.name}>{uma.umaName}</Text>
+        </View>
 
         <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>Information</Text>
           
-          {uma.umaBirthDate && (
+          {(uma.umaBirthday || uma.umaBirthDate) && (
             <View style={styles.infoRow}>
               <Text style={styles.label}>Birth Date:</Text>
-              <Text style={styles.value}>{uma.umaBirthDate}</Text>
+              <Text style={styles.value}>{uma.umaBirthday || uma.umaBirthDate}</Text>
+            </View>
+          )}
+
+          {uma.funFact && (
+            <View style={styles.infoRow}>
+              <Text style={styles.label}>Fun Fact:</Text>
+              <Text style={styles.value}>{uma.funFact}</Text>
             </View>
           )}
 
@@ -120,10 +141,10 @@ export default function UmaDetailScreen() {
           )}
         </View>
 
-        {uma.umaDescription && (
+        {(uma.umaBio || uma.umaDescription) && (
           <View style={styles.descriptionSection}>
-            <Text style={styles.sectionTitle}>Description</Text>
-            <Text style={styles.description}>{uma.umaDescription}</Text>
+            <Text style={styles.sectionTitle}>Bio</Text>
+            <Text style={styles.description}>{uma.umaBio || uma.umaDescription}</Text>
           </View>
         )}
       </View>
@@ -155,15 +176,26 @@ const styles = StyleSheet.create({
     height: 300,
     backgroundColor: '#e0e0e0',
   },
+  profileSection: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  profileIcon: {
+    width: 100,
+    height: 100,
+    marginBottom: 12,
+    borderRadius: 50,
+    backgroundColor: '#f0f0f0',
+  },
   content: {
     paddingHorizontal: 16,
     paddingVertical: 20,
   },
   name: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 20,
+    textAlign: 'center',
   },
   infoSection: {
     backgroundColor: '#fff',
