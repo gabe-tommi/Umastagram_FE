@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 interface Uma {
   id: number;
@@ -19,6 +19,7 @@ interface Uma {
 export default function UmasScreen() {
   const router = useRouter();
   const [umas, setUmas] = useState<Uma[]>([]);
+  const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -92,10 +93,32 @@ export default function UmasScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Uma Characters</Text>
+      <View style={styles.searchContainer}>
+        <TextInput
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Search by name..."
+          placeholderTextColor="#999"
+          style={styles.searchInput}
+          clearButtonMode="never"
+        />
+        {query.length > 0 && (
+          <TouchableOpacity style={styles.clearButton} onPress={() => setQuery('')}>
+            <Text style={styles.clearButtonText}>Clear</Text>
+          </TouchableOpacity>
+        )}
+      </View>
       <FlatList
-        data={umas}
+        data={umas.filter(u => {
+          if (!query) return true;
+          const q = query.toLowerCase();
+          return (
+            (u.name && u.name.toLowerCase().includes(q)) ||
+            (u.umaName && u.umaName.toLowerCase().includes(q))
+          );
+        })}
         renderItem={renderUmaItem}
-        keyExtractor={(item) => (item.id || item.umaId || '').toString()}
+        keyExtractor={(item) => String(item.id ?? item.umaId ?? item.name ?? item.umaName ?? '')}
         contentContainerStyle={styles.listContent}
         scrollEnabled={true}
       />
@@ -165,6 +188,37 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#666',
     lineHeight: 18,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    marginBottom: 8,
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 14,
+    color: '#333',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  clearButton: {
+    marginLeft: 8,
+    backgroundColor: '#4FBF1D',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  clearButtonText: {
+    color: '#fff',
+    fontWeight: '600',
   },
   errorText: {
     fontSize: 16,
