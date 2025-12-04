@@ -5,10 +5,67 @@
   Summary: Main entry point for Umastagram application and login screen
 */
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Image, ImageBackground, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Dimensions, Easing, Image, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { storage } from '../lib/storage';
-// import * as Device from 'expo-device';
+
+const { height: screenHeight, width: screenWidth } = Dimensions.get('window');
+
+const FallingImage = ({ imageSource, duration, delay, randomX, randomDelay, isClockwise }: { imageSource: any; duration: number; delay: number; randomX: number; randomDelay: number; isClockwise: boolean }) => {
+  const translateY = useRef(new Animated.Value(-80)).current;
+  const rotation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const startAnimation = (isFirstRun = true) => {
+      translateY.setValue(-80);
+      rotation.setValue(0);
+
+      Animated.sequence([
+        Animated.delay(isFirstRun ? delay : 0),
+        Animated.parallel([
+          Animated.timing(translateY, {
+            toValue: screenHeight + 100,
+            duration: duration,
+            easing: Easing.linear,
+            useNativeDriver: true,
+          }),
+          Animated.timing(rotation, {
+            toValue: isClockwise ? -1 : 1,
+            duration: duration,
+            easing: Easing.linear,
+            useNativeDriver: true,
+          }),
+        ]),
+      ]).start(() => {
+        startAnimation(false);
+      });
+    };
+
+    startAnimation(true);
+  }, []);
+
+  const rotateInterpolate = rotation.interpolate({
+    inputRange: isClockwise ? [-1, 0] : [0, 1],
+    outputRange: isClockwise ? ['-360deg', '0deg'] : ['0deg', '360deg'],
+  });
+
+  return (
+    <Animated.View
+      style={[
+        styles.fallingImageContainer,
+        {
+          left: randomX,
+          transform: [
+            { translateY },
+            { rotate: rotateInterpolate },
+          ],
+        },
+      ]}
+    >
+      <Image source={imageSource} style={styles.fallingImageSize} />
+    </Animated.View>
+  );
+};
 
 export default function Index() {
   const router = useRouter();
@@ -19,6 +76,26 @@ export default function Index() {
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [onModalClose, setOnModalClose] = useState<(() => void) | null>(null);
+  const [fallingImages, setFallingImages] = useState<Array<{ id: number; randomX: number; duration: number; delay: number; shoeImage: any; isClockwise: boolean }>>([]);
+
+  useEffect(() => {
+    // Generate falling images with random shoe colors - snowfall effect
+    const shoeImages = [
+      require('../assets/images/pinkshoe.png'),
+      require('../assets/images/yellowshoe.png'),
+      require('../assets/images/blueshoe.png'),
+    ];
+
+    const images = Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      randomX: Math.random() * (screenWidth - 60),
+      duration: 10000 + Math.random() * 5000, // Slower: 10-15 seconds
+      delay: i * 200, // Spaced out for flow
+      shoeImage: shoeImages[Math.floor(Math.random() * shoeImages.length)],
+      isClockwise: Math.random() > 0.5, // Random direction
+    }));
+    setFallingImages(images);
+  }, []);
 
   const showAlert = (title: string, message: string, onOk?: () => void) => {
     setModalTitle(title);
@@ -111,7 +188,19 @@ export default function Index() {
   };
 
   return (
-    <ImageBackground source={require('../assets/images/umabg.png')} style={styles.container}>
+    <View style={styles.container}>
+      {/* Falling Shoes */}
+      {fallingImages.map((img) => (
+        <FallingImage
+          key={img.id}
+          imageSource={img.shoeImage}
+          duration={img.duration}
+          delay={img.delay}
+          randomX={img.randomX}
+          randomDelay={Math.random() * 1000}
+          isClockwise={img.isClockwise}
+        />
+      ))}
       {/* Custom Modal */}
       <Modal
         animationType="fade"
@@ -172,22 +261,33 @@ export default function Index() {
           </TouchableOpacity>
         </View>
       </View>
-    </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    resizeMode: 'cover',
-    width: '100%',
-    height: '100%',
+    backgroundColor: '#148b01ff',
+  },
+  fallingImageContainer: {
+    position: 'absolute',
+    top: -80,
+    width: 60,
+    height: 60,
+    zIndex: 1,
+  },
+  fallingImageSize: {
+    width: 60,
+    height: 60,
+    resizeMode: 'contain',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,
+    zIndex: 10,
   },
   innerContainer: {
     width: '100%',
