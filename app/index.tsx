@@ -5,8 +5,8 @@
   Summary: Main entry point for Umastagram application and login screen
 */
 import { useRouter } from 'expo-router';
-import { Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useState } from 'react';
+import { Image, ImageBackground, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { storage } from '../lib/storage';
 // import * as Device from 'expo-device';
 
@@ -111,7 +111,7 @@ export default function Index() {
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={require('../assets/images/umabg.png')} style={styles.container}>
       {/* Custom Modal */}
       <Modal
         animationType="fade"
@@ -130,54 +130,73 @@ export default function Index() {
         </View>
       </Modal>
       <View style={styles.content}>
-        <Text style={styles.title}>Umastagram</Text>
-        <Text style={styles.subtitle}>Welcome to Umastagram!</Text>
-        
-        <TouchableOpacity style={styles.enterButton} onPress={handleEnterApp}>
-          <Text style={styles.enterButtonText}>Enter App</Text>
-        </TouchableOpacity>
-        <TextInput 
-            placeholder="Username"
-            style={styles.input}
-            value={username}
-            onChangeText={setUsername}
-        />
-        <TextInput 
-            placeholder="Password"
-            style={styles.input}
-            secureTextEntry={true}
-            value={password}
-            onChangeText={setPassword}
-        />
-        <TouchableOpacity style={styles.enterButton} onPress={handleLogin}>
-          <Text style={styles.enterButtonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.enterButton} onPress={navigateToSignup}>
-          <Text style={styles.enterButtonText}>Don't have an account? Signup!</Text>
-        </TouchableOpacity>
+        <View style={styles.innerContainer}>
+          <Text style={styles.title}>Umastagram</Text>
+          <Text style={styles.subtitle}>Welcome to Umastagram!</Text>
+          
+          <TouchableOpacity style={styles.enterButton} onPress={handleEnterApp}>
+            <Text style={styles.enterButtonText}>Enter App</Text>
+          </TouchableOpacity>
+          <TextInput 
+              placeholder="Username"
+              style={styles.input}
+              value={username}
+              onChangeText={setUsername}
+          />
+          <TextInput 
+              placeholder="Password"
+              style={styles.input}
+              secureTextEntry={true}
+              value={password}
+              onChangeText={setPassword}
+          />
+          <TouchableOpacity style={styles.enterButton} onPress={handleLogin}>
+            <Text style={styles.enterButtonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.enterButton} onPress={navigateToSignup}>
+            <Text style={styles.enterButtonText}>Don't have an account? Signup!</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.enterButton} onPress={handleGitHubLogin}>
-          <Text style={styles.enterButtonText}>Login with GitHub</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton} onPress={handleGitHubLogin}>
+            <View style={styles.socialButtonContent}>
+              <Image source={require('../assets/images/github-mark.png')} style={styles.socialIcon} />
+              <Text style={styles.socialButtonText}>Login with GitHub</Text>
+            </View>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.enterButton} onPress={handleGoogleLogin}>
-          <Text style={styles.enterButtonText}>Login with Google</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton} onPress={handleGoogleLogin}>
+            <View style={styles.socialButtonContent}>
+              <Image source={require('../assets/images/g.webp=s96-fcrop64=1,00000000ffffffff-rw.webp')} style={styles.socialIcon} />
+              <Text style={styles.socialButtonText}>Login with Google</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    resizeMode: 'cover',
+    width: '100%',
+    height: '100%',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,
+  },
+  innerContainer: {
+    width: '100%',
+    gap: 16,
+    backgroundColor: '#F7FFED',
+    padding: 32,
+    borderRadius: 12,
+    maxWidth: 650,
+    alignItems: 'center'
   },
   title: {
     fontSize: 32,
@@ -192,14 +211,14 @@ const styles = StyleSheet.create({
   },
   enterButton: {
     height: 50,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#4FBF1D',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 32,
   },
   enterButtonText: {
-    color: '#fff',
+    color: '#F7FFED',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -217,7 +236,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: '#F7FFED',
     borderRadius: 12,
     padding: 24,
     minWidth: 280,
@@ -243,14 +262,39 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   modalButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#4FBF1D',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 32,
     alignItems: 'center',
   },
   modalButtonText: {
-    color: '#fff',
+    color: '#F7FFED',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  socialButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  socialIcon: {
+    width: 20,
+    height: 20,
+  },
+  socialButton: {
+    height: 50,
+    backgroundColor: '#ffffffff',
+    borderWidth: 3,
+    borderColor: '#4FBF1D',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 32,
+    maxWidth: 300,
+  },
+  socialButtonText: {
+    color: '#333',
     fontSize: 16,
     fontWeight: '600',
   },
