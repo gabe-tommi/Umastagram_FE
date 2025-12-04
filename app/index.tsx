@@ -304,10 +304,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   logo: {
-    flex: 1,
     width: '100%',
-    maxHeight: 100,
+    height: 100,
     resizeMode: 'contain',
+    marginBottom: 20,
   },
   subtitle: {
     fontSize: 16,
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
   },
    input: { // taken from react native docs
     height: 40,
-    margin: 12,
+    margin: 6,
     borderWidth: 1,
     padding: 10,
   },
