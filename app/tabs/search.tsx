@@ -8,10 +8,11 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Alert,
-    StyleSheet,
+    StyleSheet, GestureResponderEvent,
 } from 'react-native';
+import {router} from "expo-router";
 
-export default function SearchTab(): JSX.Element {
+export function SearchPage(): JSX.Element {
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<string[]>([]);
@@ -31,8 +32,13 @@ export default function SearchTab(): JSX.Element {
         }
     };
 
-    const renderItem = ({ item }: { item: string }) => (
-      <TouchableOpacity style={styles.itemButton}>
+    function profileSelect(username: string): void {
+        // @ts-ignore
+        router.replace('/profile/{username}', {username: username});
+    }
+
+    const renderItem = ({item}: { item: string }) => (
+      <TouchableOpacity style={styles.itemButton} onPress={() => profileSelect(item)}>
           <Text style={styles.itemText}>{item}</Text>
       </TouchableOpacity>
     );
@@ -48,10 +54,10 @@ export default function SearchTab(): JSX.Element {
                 returnKeyType="search"
                 onSubmitEditing={handleSearch}
               />
-              <Button title="Search" onPress={handleSearch} disabled={loading} />
+              <Button title="Search" onPress={handleSearch} disabled={loading}/>
           </View>
 
-          {loading && <ActivityIndicator style={{ marginVertical: 8 }} />}
+          {loading && <ActivityIndicator style={{marginVertical: 8}}/>}
 
           <FlatList
             data={results}
