@@ -6,6 +6,7 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
+        headerTitleAlign: 'center',
         tabBarStyle: {
           backgroundColor: '#fff',
           borderTopWidth: 1,
@@ -18,6 +19,7 @@ export default function TabsLayout() {
         name="posts"
         options={{
           title: 'Posts',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
           ),
@@ -27,6 +29,7 @@ export default function TabsLayout() {
         name="dms"
         options={{
           title: 'Messages',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbubble" size={size} color={color} />
           ),
@@ -36,6 +39,7 @@ export default function TabsLayout() {
         name="account"
         options={{
           title: 'Account',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" size={size} color={color} />
           ),
