@@ -45,6 +45,16 @@ export default function TabsLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="umas"
+        options={{
+          title: 'Umas',
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="horse" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
