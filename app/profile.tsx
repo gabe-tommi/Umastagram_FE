@@ -1,20 +1,28 @@
 import {useLocalSearchParams} from "expo-router";
-import {Alert, StyleSheet, Text, View} from "react-native";
-import React, {useState} from "react";
-
-
+import {Alert, Button, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React, {useCallback, useEffect, useState} from "react";
 
 export default  function ProfilePage(){
     const { username } = useLocalSearchParams<{ username: string }>();
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<string[]>([]);
+    //
+    //
+    // const sendFriendRequest = async({ number:userId }):Promise<void> => {
+    //
+    // }
 
-    const fetchUserData = async (p0: { username: string; }):Promise<string[]> => {
-        if (!username.trim()) return [];
+    const fetchUserData = useCallback(async (username: string) => {
+        if (!username.trim()) {
+            setResults([]);
+            return;
+        }
+
         setLoading(true);
-        setResults([]);
         try {
-            const res = await fetch(`https://beuma-64bbab9df83e.herokuapp.com/user/getUserByUsername/${encodeURIComponent(username.trim())}`);
+            const res = await fetch(
+                `https://beuma-64bbab9df83e.herokuapp.com/user/getUserByUsername/${encodeURIComponent(username.trim())}`
+            );
             const data: string[] = await res.json();
             setResults(data);
         } catch (err) {
@@ -22,13 +30,17 @@ export default  function ProfilePage(){
         } finally {
             setLoading(false);
         }
-        return results;
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchUserData(username);
+    }, [username, fetchUserData]); // fetchUserData is now stable too
 
     return (
         <View style={styles.container}>
             <Text> User: { username } </Text>
-            <Text onTextLayout={() => fetchUserData({username})}></Text>
+            <Text> Github: { results[0] }</Text>
+            <TouchableOpacity>Send Friend Request</TouchableOpacity>
         </View>
     );
 
