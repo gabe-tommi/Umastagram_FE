@@ -25,6 +25,10 @@ interface HorseDetail {
   horseBirthday?: string;
   horseDeathday?: string;
   horseBio?: string;
+  horseDescription?: string;
+  horseName?: string;
+  bio?: string;
+  description?: string;
   [key: string]: any;
 }
 
@@ -52,7 +56,7 @@ export default function UmaDetailScreen() {
     // initialize current sources after uma/horse load
     if (uma) {
       const heroImg = viewMode === 'game' ? uma.umaImageLink : (horse?.horseImageLink || uma.imagePath || uma.umaImageLink);
-      const iconImg = viewMode === 'game' ? uma.umaIconLink : (horse?.horseImageLink || uma.umaIcon || uma.umaIconLink);
+      const iconImg = viewMode === 'game' ? uma.umaIconLink : undefined;
       setCurrentHero(heroImg);
       setCurrentIcon(iconImg);
       heroFade.setValue(1);
@@ -99,7 +103,7 @@ export default function UmaDetailScreen() {
 
     // compute new sources
     const newHero = mode === 'game' ? uma.umaImageLink : (horse?.horseImageLink || uma.imagePath || uma.umaImageLink);
-    const newIcon = mode === 'game' ? uma.umaIconLink : (horse?.horseImageLink || uma.umaIcon || uma.umaIconLink);
+    const newIcon = mode === 'game' ? uma.umaIconLink : undefined;
 
     // cross-fade hero
     Animated.timing(heroFade, {
@@ -197,9 +201,9 @@ export default function UmaDetailScreen() {
 
       <View style={styles.content}>
         <View style={styles.profileSection}>
-            {(currentIcon || (viewMode === 'game' ? uma.umaIconLink : (horse?.horseImageLink || uma.umaIcon || uma.umaIconLink))) && (
+            {currentIcon && (
               <Animated.Image
-                source={{ uri: currentIcon || (viewMode === 'game' ? uma.umaIconLink : (horse?.horseImageLink || uma.umaIcon || uma.umaIconLink)) }}
+                source={{ uri: currentIcon }}
                 style={[styles.profileIcon, { opacity: iconFade }]}
                 resizeMode="contain"
               />
@@ -216,16 +220,10 @@ export default function UmaDetailScreen() {
               ? [
                   { label: 'Birth Date', value: getUma('umaBirthday', 'umaBirthDate') },
                   { label: 'Fun Fact', value: getUma('funFact') },
-                  { label: 'Height', value: getUma('umaHeight') },
-                  { label: 'Weight', value: getUma('umaWeight') },
-                  { label: 'Ability', value: getUma('umaAbility') },
                 ]
               : [
                   { label: 'Birth Date', value: getHorse('horseBirthday', 'birthDate') },
-                  { label: 'Death Date', value: getHorse('horseDeathday', 'deathDate') },
-                  { label: 'Breed', value: getHorse('breed') },
-                  { label: 'Color', value: getHorse('color') },
-                ];
+                  { label: 'Death Date', value: getHorse('horseDeathday', 'deathDate') },                ];
 
             return rows.map((r, idx) => r.value ? (
               <View style={styles.infoRow} key={String(idx)}>
@@ -241,7 +239,7 @@ export default function UmaDetailScreen() {
           const getHorse = (...keys: string[]) => keys.map(k => horse?.[k]).find(Boolean);
           const bio = viewMode === 'game'
             ? getUma('umaBio', 'umaDescription')
-            : getHorse('horseBio', 'bio');
+            : getHorse('horseBio', 'horseDescription', 'bio', 'description');
 
           return bio ? (
             <View style={styles.descriptionSection}>
@@ -286,6 +284,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+
   profileIcon: {
     width: 100,
     height: 100,
