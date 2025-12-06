@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useRouter } from 'expo-router';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { storage } from '../../lib/storage';
 
 export default function AccountPage() {
@@ -253,10 +253,7 @@ const styles = StyleSheet.create({
     padding: 24,
     minWidth: 280,
     maxWidth: 400,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)',
     elevation: 5,
   },
   modalTitle: {

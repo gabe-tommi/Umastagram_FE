@@ -51,7 +51,7 @@ export default function TabsLayout() {
           title: 'Umas',
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="horse" size={size} color={color} />
+            <Ionicons name="paw" size={size} color={color} />
           ),
         }}
       />

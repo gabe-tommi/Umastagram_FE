@@ -156,10 +156,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     overflow: 'hidden',
     elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
     alignItems: 'center',
   },
   profileImage: {
@@ -203,10 +200,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 14,
     color: '#333',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
+    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
     elevation: 1,
   },
   clearButton: {
@@ -218,7 +212,6 @@ const styles = StyleSheet.create({
   },
   clearButtonText: {
     color: '#fff',
-    fontWeight: '600',
   },
   errorText: {
     fontSize: 16,
