@@ -329,6 +329,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3E9EC',
     marginTop: 20,
     marginBottom: 20,
+    borderRadius: 8,
   },
   mainLayout: {
     flexDirection: 'row',

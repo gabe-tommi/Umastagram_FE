@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { storage } from '../lib/storage';
 import { createPost } from '../postsAPI/postsAPI';
 import { pickImage } from '../services/imageService';
-const bgImage = require('../assets/images/umastagram_background.png');
+const bgImage = require('../assets/images/umastagram_background_2.png');
 
 
 
