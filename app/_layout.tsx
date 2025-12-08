@@ -142,6 +142,10 @@ export default function RootLayout() {
         name="profile"
         options={{ animation: 'fade' }}
       />
+      <Stack.Screen
+          name="inbox"
+          options={{ animation: 'fade' }}
+      />
     </Stack>
   );
 }
