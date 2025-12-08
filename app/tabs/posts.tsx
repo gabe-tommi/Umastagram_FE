@@ -116,7 +116,7 @@ export default function PostsPage() {
         {/* Loading State */}
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#007AFF" />
+            <ActivityIndicator size="large" color="#9ADB58" />
             <Text style={styles.loadingText}>Loading posts...</Text>
           </View>
         ) : posts.length === 0 ? (
@@ -130,7 +130,7 @@ export default function PostsPage() {
             <View style={styles.postHeader}>
               <View style={styles.userInfo}>
                 <View style={styles.avatar}>
-                  <Ionicons name="person-circle" size={40} color="#007AFF" />
+                  <Ionicons name="person-circle" size={40} color="#9ADB58" />
                 </View>
                 <View>
                   <Text style={styles.username}>User #{post.userId}</Text>
@@ -148,7 +148,7 @@ export default function PostsPage() {
                 {loadingImages.has(post.id) && (
                   <ActivityIndicator 
                     size="large" 
-                    color="#007AFF" 
+                    color="#9ADB58" 
                     style={styles.loadingSpinner}
                   />
                 )}
@@ -211,21 +211,17 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'contain',
   },
-  container: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
   header: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderBottomColor: '#F8F2F7',
+    backgroundColor: '#F8F2F7',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#333',
+    color: '#494647',
   },
   content: {
     padding: 12,
@@ -234,6 +230,7 @@ const styles = StyleSheet.create({
       alignSelf: 'center',
       width: '100%',
     }),
+    backgroundColor: '#ffffff',
   },
   makePostContainer: {
     flexDirection: 'row',
@@ -247,13 +244,13 @@ const styles = StyleSheet.create({
   makePostText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#494647',
   },
   makePostButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#9ADB58',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -276,7 +273,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+      color: '#494647',
   },
   timestamp: {
     fontSize: 12,
@@ -285,7 +282,7 @@ const styles = StyleSheet.create({
   },
   postText: {
     fontSize: 16,
-    color: '#333',
+    color: '#494647',
     marginBottom: 12,
     lineHeight: 22,
   },
@@ -323,7 +320,7 @@ const styles = StyleSheet.create({
   actionText: {
     marginLeft: 6,
     fontSize: 14,
-    color: '#666',
+    color: '#9e9899',
     fontWeight: '500',
   },
   loadingContainer: {

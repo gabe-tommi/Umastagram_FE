@@ -1,11 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { storage } from '../lib/storage';
 import { createPost } from '../postsAPI/postsAPI';
 import { pickImage } from '../services/imageService';
+const bgImage = require('../assets/images/umastagram_background.png');
+
 
 
 export default function PostMaker() {
@@ -77,12 +79,13 @@ export default function PostMaker() {
   };
 
   return (
+    <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="contain">
     <ScrollView style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.content}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={handleBack}>
-            <Ionicons name="chevron-back" size={28} color="#007AFF" />
+            <Ionicons name="chevron-back" size={28} color="#9ADB58" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Create Post</Text>
           <View style={{ width: 28 }} />
@@ -93,8 +96,8 @@ export default function PostMaker() {
           <Text style={styles.label}>Enter text here: </Text>
           <TextInput
             style={styles.textInput}
-            placeholder="Write your post here..."
-            placeholderTextColor="#999"
+            placeholder="What do you want to share with the world?..."
+            placeholderTextColor="#c2babd"
             multiline
             numberOfLines={4}
             value={postText}
@@ -122,7 +125,7 @@ export default function PostMaker() {
 
         {/* Image Picker Button */}
         <TouchableOpacity style={styles.pickImageButton} onPress={handlePickImage}>
-          <Ionicons name="image" size={24} color="#007AFF" />
+          <Ionicons name="image" size={24} color="#9ADB58" />
           <Text style={styles.pickImageText}>
             {selectedImage ? 'Change Image' : 'Add Image'}
           </Text>
@@ -142,13 +145,23 @@ export default function PostMaker() {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+    background: {
+    flex: 1,
+    backgroundColor: '#F3E9EC',
+  },
+  bgImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
   },
   content: {
     padding: 16,
@@ -158,6 +171,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 24,
+    backgroundColor: '#fefdfd',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 8,
   },
   headerTitle: {
     fontSize: 18,
@@ -168,7 +185,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: '600',
     color: '#333',
     marginBottom: 8,
@@ -181,6 +198,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     textAlignVertical: 'top',
+    backgroundColor: '#fefdfd',
   },
   pickImageButton: {
     flexDirection: 'row',
@@ -189,14 +207,15 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: '#007AFF',
+    borderColor: '#9ADB58',
     borderRadius: 8,
     marginBottom: 20,
+    backgroundColor: '#fefdfd',
   },
   pickImageText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#007AFF',
+    color: '#9ADB58',
     marginLeft: 8,
   },
   imagePreviewContainer: {
@@ -244,14 +263,14 @@ const styles = StyleSheet.create({
   submitButton: {
     paddingVertical: 14,
     paddingHorizontal: 16,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#9ADB58',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
   },
   submitButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#9ADB58',
   },
   submitButtonText: {
     fontSize: 16,

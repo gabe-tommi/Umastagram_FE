@@ -8,11 +8,11 @@ export default function TabsLayout() {
         headerShown: false,
         headerTitleAlign: 'center',
         tabBarStyle: {
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          backgroundColor: '#fefdfd',
           borderTopWidth: 1,
-          borderTopColor: '#e0e0e0',
+          borderTopColor:  '#fefdfd',
         },
-        tabBarActiveTintColor: '#007AFF',
+        tabBarActiveTintColor: '#9ADB58',
         tabBarInactiveTintColor: '#8E8E93',
       }}>
       <Tabs.Screen

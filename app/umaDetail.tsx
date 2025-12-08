@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Easing, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
+import { ActivityIndicator, Animated, Easing, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+const bgImage = require('../assets/images/umastagram_background.png');
 
 interface UmaDetail {
   umaId: number;
@@ -150,6 +150,7 @@ export default function UmaDetailScreen() {
 
   if (error || !uma) {
     return (
+    <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="contain">
       <View style={styles.container}>
         <View style={styles.errorContainer}>
           <TouchableOpacity
@@ -164,10 +165,13 @@ export default function UmaDetailScreen() {
           </TouchableOpacity>
         </View>
       </View>
+    </ImageBackground>
     );
+
   }
 
   return (
+  <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="contain">
     <ScrollView style={styles.container}>
       <TouchableOpacity
         style={styles.backButton}
@@ -195,23 +199,18 @@ export default function UmaDetailScreen() {
         </TouchableOpacity>
       </View>
 
-      <Animated.Image
-        source={{ uri: currentHero || (viewMode === 'game' ? uma.umaImageLink : (horse?.horseImageLink || uma.imagePath || uma.umaImageLink)) }}
-        style={[styles.heroImage, { opacity: heroFade }]}
-        resizeMode="contain"
-      />
-
-      <View style={styles.content}>
-        <View style={styles.profileSection}>
-            {currentIcon && (
-              <Animated.Image
-                source={{ uri: currentIcon }}
-                style={[styles.profileIcon, { opacity: iconFade }]}
-                resizeMode="contain"
-              />
-            )}
-          <Text style={styles.name}>{viewMode === 'game' ? (uma.umaName || uma.umaId) : (horse?.horseName || uma.name || uma.realName || uma.umaName)}</Text>
-        </View>
+      <View style={[styles.mainLayout, viewMode === 'real' && styles.mainLayoutColumn]}>
+        <View style={[styles.leftContent, viewMode === 'real' && styles.leftContentFull]}>
+          <View style={styles.profileSection}>
+              {currentIcon && (
+                <Animated.Image
+                  source={{ uri: currentIcon }}
+                  style={[styles.profileIcon, { opacity: iconFade }]}
+                  resizeMode="contain"
+                />
+              )}
+            <Text style={styles.name}>{viewMode === 'game' ? (uma.umaName || uma.umaId) : (horse?.horseName || uma.name || uma.realName || uma.umaName)}</Text>
+          </View>
 
         <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>Information</Text>
@@ -236,26 +235,53 @@ export default function UmaDetailScreen() {
           })()}
         </View>
 
-        {(() => {
-          const getUma = (...keys: string[]) => keys.map(k => uma[k]).find(Boolean);
-          const getHorse = (...keys: string[]) => keys.map(k => horse?.[k]).find(Boolean);
-          const bio = viewMode === 'game'
-            ? getUma('umaBio', 'umaDescription')
-            : getHorse('horseBio', 'horseDescription', 'bio', 'description');
+          {(() => {
+            const getUma = (...keys: string[]) => keys.map(k => uma[k]).find(Boolean);
+            const getHorse = (...keys: string[]) => keys.map(k => horse?.[k]).find(Boolean);
+            const bio = viewMode === 'game'
+              ? getUma('umaBio', 'umaDescription')
+              : getHorse('horseBio', 'horseDescription', 'bio', 'description');
 
-          return bio ? (
-            <View style={styles.descriptionSection}>
-              <Text style={styles.sectionTitle}>Bio</Text>
-              <Text style={styles.description}>{String(bio)}</Text>
-            </View>
-          ) : null;
-        })()}
+            return bio ? (
+              <View style={styles.descriptionSection}>
+                <Text style={styles.sectionTitle}>Bio</Text>
+                <Text style={styles.description}>{String(bio)}</Text>
+              </View>
+            ) : null;
+          })()}
+        </View>
+
+        {viewMode === 'game' && (
+          <Animated.Image
+            source={{ uri: currentHero || uma.umaImageLink }}
+            style={[styles.heroImage, { opacity: heroFade }]}
+            resizeMode="contain"
+          />
+        )}
       </View>
+
+      {viewMode === 'real' && (
+        <Animated.Image
+          source={{ uri: currentHero || (horse?.horseImageLink || uma.imagePath || uma.umaImageLink) }}
+          style={[styles.heroImageBottom, { opacity: heroFade }]}
+          resizeMode="contain"
+        />
+      )}
     </ScrollView>
-  );
+  </ImageBackground>
+  ); 
 }
 
 const styles = StyleSheet.create({
+  background: {
+  flex: 1,
+  backgroundColor: '#F3E9EC',
+  },
+  bgImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
   container: {
     flex: 1,
   },
@@ -277,28 +303,44 @@ const styles = StyleSheet.create({
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
   heroImage: {
-    width: '100%',
-    height: 300,
-    backgroundColor: '#e0e0e0',
+    width: '20%',
+    height: 500,
+    backgroundColor: '#F3E9EC',
+  },
+  heroImageBottom: {
+    alignSelf: 'center',
+    width: '40%',
+    height: 350,
+    backgroundColor: '#F3E9EC',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  mainLayout: {
+    flexDirection: 'row',
+    paddingTop: 64,
+    marginBottom: 20,
+  },
+  mainLayoutColumn: {
+    flexDirection: 'column',
+    paddingTop: 0,
+  },
+  leftContent: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  leftContentFull: {
+    flex: 1,
   },
   profileSection: {
     alignItems: 'center',
     marginBottom: 20,
   },
-
-  profileIcon: {
-    width: 100,
-    height: 100,
-    marginBottom: 12,
-    borderRadius: 50,
-    backgroundColor: '#f0f0f0',
-  },
   toggleContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     paddingHorizontal: 16,
-    marginTop: 64,
-    marginBottom: 8,
+    marginTop: 60,
+    marginBottom: 16,
   },
   toggleButton: {
     paddingVertical: 8,
@@ -308,7 +350,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
   },
   toggleButtonActive: {
-    backgroundColor: '#4FBF1D',
+    backgroundColor: '#9ADB58',
   },
   toggleText: {
     color: '#333',
@@ -317,9 +359,12 @@ const styles = StyleSheet.create({
   toggleTextActive: {
     color: '#fff',
   },
-  content: {
-    paddingHorizontal: 16,
-    paddingVertical: 20,
+  profileIcon: {
+    width: 80,
+    height: 80,
+    marginBottom: 12,
+    borderRadius: 40,
+    backgroundColor: '#fbf8f9',
   },
   name: {
     fontSize: 24,
@@ -328,7 +373,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   infoSection: {
-    backgroundColor: '#fff',
+    backgroundColor: '#fdfbfb',
     borderRadius: 8,
     padding: 16,
     marginBottom: 16,
@@ -346,7 +391,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#fdfbfb',
   },
   label: {
     fontSize: 14,
@@ -360,7 +405,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   descriptionSection: {
-    backgroundColor: '#fff',
+    backgroundColor: '#fdfbfb',
     borderRadius: 8,
     padding: 16,
     marginBottom: 20,

@@ -168,13 +168,14 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     overflow: 'hidden',
     elevation: 3,
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    boxShadow: '#312f2f',
     alignItems: 'center',
+    backgroundColor: '#f7f0f2',
   },
   profileImage: {
     width: 80,
     height: 80,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#fbf8f9',
     flexShrink: 0,
   },
   cardContent: {
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   clearButtonText: {
-    color: '#fff',
+    color: '#f7f0f2',
   },
   errorText: {
     fontSize: 16,
