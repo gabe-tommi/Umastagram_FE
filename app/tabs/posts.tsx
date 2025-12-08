@@ -95,7 +95,7 @@ export default function PostsPage() {
       source={bgImage}
       style={styles.background}
       imageStyle={styles.bgImage}
-      resizeMode="contain"
+      resizeMode="cover"
     >
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -205,6 +205,8 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: '#F3E9EC',
+    width: '100%',
+    height: '100%',
   },
   bgImage: {
     width: '100%',

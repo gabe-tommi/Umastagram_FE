@@ -93,7 +93,7 @@ export default function UmasScreen() {
   }
 
   return (
-    <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="contain">
+    <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="cover">
     <View style={styles.container}>
       <Text style={styles.title}>Uma Characters</Text>
       <View style={styles.searchContainer}>
@@ -134,6 +134,8 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: '#F3E9EC',
+    width: '100%',
+    height: '100%',
   },
   bgImage: {
     width: '100%',

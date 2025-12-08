@@ -4,7 +4,7 @@ const bgImage = require('../../assets/images/umastagram_background.png');
 
 export default function DMsPage() {
   return (
-    <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="contain">
+    <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="cover">
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Messages</Text>
@@ -28,6 +28,8 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: '#F3E9EC',
+    width: '100%',
+    height: '100%',
   },
   bgImage: {
     width: '100%',
