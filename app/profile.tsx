@@ -10,24 +10,26 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from '../lib/storage';
+
 
 export default function ProfilePage() {
     const { friendName } = useLocalSearchParams<{ friendName: string }>();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<string[]>([]);
-    const [currentUsername, setCurrentUsername] = useState<string>('');
+    const [currentUsername, setUsername] = useState<string>('');
 
-    // Get the current logged-in user's username
     useEffect(() => {
-        const getCurrentUsername = async () => {
-            const username = await AsyncStorage.getItem('username');
-            if (username) {
-                setCurrentUsername(username);
-            }
-        };
-        getCurrentUsername();
+        loadUserData();
     }, []);
+
+    const loadUserData = async () => {
+        const auth = await storage.getAuth();
+        if (auth?.username) {
+            setUsername(auth.username);
+        }
+    };
 
     const fetchUserData = useCallback(async (friendName: string) => {
         if (!friendName || !friendName.trim()) {
@@ -52,16 +54,16 @@ export default function ProfilePage() {
     }, []);
 
     const sendFriendRequest = useCallback(async () => {
-        if (!currentUsername) {
-            Alert.alert('Error', 'You must be logged in to send friend requests');
-            return;
-        }
-
-        if (!friendName || !friendName.trim()) {
-            Alert.alert('Error', 'Invalid friend name');
-            return;
-        }
-
+        // if (!currentUsername) {
+        //     Alert.alert('Error', 'You must be logged in to send friend requests');
+        //     return;
+        // }
+        //
+        // if (!friendName || !friendName.trim()) {
+        //     Alert.alert('Error', 'Invalid friend name');
+        //     return;
+        // }
+        //
         try {
             console.log("Starting friend request process...");
 
@@ -87,7 +89,6 @@ export default function ProfilePage() {
 
             console.log("Sending request with userId:", userId, "friendId:", friendId);
 
-            // Send friend request
             const requestRes = await fetch(
                 `https://beuma-64bbab9df83e.herokuapp.com/api/friends/sendFriendRequest/${userId}/${friendId}`,
                 {
@@ -112,6 +113,7 @@ export default function ProfilePage() {
             console.error('Error sending friend request:', err);
             Alert.alert('Error', String(err));
         }
+
     }, [friendName, currentUsername]);
 
     useEffect(() => {
