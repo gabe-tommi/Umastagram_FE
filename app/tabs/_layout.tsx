@@ -8,12 +8,12 @@ export default function TabsLayout() {
         headerShown: false,
         headerTitleAlign: 'center',
         tabBarStyle: {
-          backgroundColor: '#fefdfd',
+          backgroundColor: '#fdfbfb',
           borderTopWidth: 1,
-          borderTopColor:  '#fefdfd',
+          borderTopColor:  '#fdfbfb',
         },
         tabBarActiveTintColor: '#9ADB58',
-        tabBarInactiveTintColor: '#8E8E93',
+        tabBarInactiveTintColor: '#603745',
       }}>
       <Tabs.Screen
         name="posts"

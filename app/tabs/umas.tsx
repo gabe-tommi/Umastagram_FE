@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#603745',
     marginLeft: 16,
     marginBottom: 16,
   },
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     boxShadow: '#312f2f',
     alignItems: 'center',
-    backgroundColor: '#f7f0f2',
+    backgroundColor: '#faf6f7',
   },
   profileImage: {
     width: 80,
@@ -186,17 +186,17 @@ const styles = StyleSheet.create({
   umaImage: {
     width: '100%',
     height: 150,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#faf6f7',
   },
   umaName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#333',
+    color: '#603745',
     marginBottom: 4,
   },
   umaBio: {
     fontSize: 13,
-    color: '#666',
+    color: '#603745',
     lineHeight: 18,
   },
   searchContainer: {
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     fontSize: 14,
-    color: '#333',
+    color: '#603745',
     boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
     elevation: 1,
   },

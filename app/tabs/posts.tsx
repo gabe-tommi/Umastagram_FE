@@ -180,15 +180,15 @@ export default function PostsPage() {
                 <Ionicons
                   name={likedPosts.has(post.id) ? "heart" : "heart-outline"}
                   size={24}
-                  color={likedPosts.has(post.id) ? "#ff4444" : "#666"}
+                  color={likedPosts.has(post.id) ? "#ff4444" : "#603745"}
                 />
-                <Text style={[styles.actionText, { color: likedPosts.has(post.id) ? "#ff4444" : "#666" }]}>
+                <Text style={[styles.actionText, { color: likedPosts.has(post.id) ? "#ff4444" : "#603745" }]}>
                   {postsLikes[post.id]}
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.actionButton}>
-                <Ionicons name="chatbubble-outline" size={24} color="#666" />
+                <Ionicons name="chatbubble-outline" size={24} color="#603745" />
                 <Text style={styles.actionText}>Comment</Text>
               </TouchableOpacity>
             </View>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   makePostText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#494647',
+    color: '#603745',
   },
   makePostButton: {
     width: 40,
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 14,
     fontWeight: '600',
-      color: '#494647',
+      color: '#603745',
   },
   timestamp: {
     fontSize: 12,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   },
   postText: {
     fontSize: 16,
-    color: '#494647',
+    color: '#603745',
     marginBottom: 12,
     lineHeight: 22,
   },
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
   actionText: {
     marginLeft: 6,
     fontSize: 14,
-    color: '#9e9899',
+    color: '#603745',
     fontWeight: '500',
   },
   loadingContainer: {

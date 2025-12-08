@@ -140,6 +140,21 @@ export default function UmaDetailScreen() {
     });
   };
 
+  // Format birthday to only display month and day for umas
+  const formatUmaBirthday = (dateString: string) => {
+    if (!dateString) return '';
+    try {
+      const date = new Date(dateString);
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const days = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth', 'Eleventh', 'Twelfth', 'Thirteenth', 'Fourteenth', 'Fifteenth', 'Sixteenth', 'Seventeenth', 'Eighteenth', 'Nineteenth', 'Twentieth', 'Twenty-First', 'Twenty-Second', 'Twenty-Third', 'Twenty-Fourth', 'Twenty-Fifth', 'Twenty-Sixth', 'Twenty-Seventh', 'Twenty-Eighth', 'Twenty-Ninth', 'Thirtieth', 'Thirty-First'];
+      const month = months[date.getMonth()];
+      const day = days[date.getDate() - 1];
+      return `${month} ${day}`;
+    } catch {
+      return dateString;
+    }
+  };
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -157,7 +172,7 @@ export default function UmaDetailScreen() {
             style={styles.backButton}
             onPress={() => router.back()}
           >
-            <Ionicons name="chevron-back" size={28} color="#333" />
+            <Ionicons name="chevron-back" size={28} color="#603745" />
           </TouchableOpacity>
           <Text style={styles.errorText}>Error: {error || 'Uma not found'}</Text>
           <TouchableOpacity style={styles.retryButton} onPress={() => fetchUmaDetail(id as string)}>
@@ -177,7 +192,7 @@ export default function UmaDetailScreen() {
         style={styles.backButton}
         onPress={() => router.back()}
       >
-        <Ionicons name="chevron-back" size={28} color="#333" />
+        <Ionicons name="chevron-back" size={28} color="#603745" />
       </TouchableOpacity>
 
       <View style={styles.toggleContainer}>
@@ -219,12 +234,12 @@ export default function UmaDetailScreen() {
             const getHorse = (...keys: string[]) => keys.map(k => horse?.[k]).find(Boolean);
             const rows = viewMode === 'game'
               ? [
-                  { label: 'Birth Date', value: getUma('umaBirthday', 'umaBirthDate') },
+                  { label: 'Birth Date', value: formatUmaBirthday(getUma('umaBirthday', 'umaBirthDate') || '') },
                   { label: 'Fun Fact', value: getUma('funFact') },
                 ]
               : [
-                  { label: 'Birth Date', value: getHorse('horseBirthday', 'birthDate') },
-                  { label: 'Death Date', value: getHorse('horseDeathday', 'deathDate') },                ];
+                  { label: 'Birth Date', value: getHorse('horseBirthday', 'birthDate') || '' },
+                  { label: 'Death Date', value: getHorse('horseDeathday', 'deathDate') || '' },                ];
 
             return rows.map((r, idx) => r.value ? (
               <View style={styles.infoRow} key={String(idx)}>
@@ -353,7 +368,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#9ADB58',
   },
   toggleText: {
-    color: '#333',
+    color: '#603745',
     fontWeight: '600',
   },
   toggleTextActive: {
@@ -369,7 +384,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#603745',
     textAlign: 'center',
   },
   infoSection: {
@@ -383,7 +398,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#603745',
     marginBottom: 12,
   },
   infoRow: {
@@ -396,11 +411,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+    color: '#603745',
   },
   value: {
     fontSize: 14,
-    color: '#333',
+    color: '#603745',
     flex: 1,
     textAlign: 'right',
   },
@@ -415,7 +430,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     lineHeight: 22,
-    color: '#555',
+    color: '#603745',
   },
   errorText: {
     fontSize: 16,
