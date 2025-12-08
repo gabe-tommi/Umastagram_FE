@@ -1,6 +1,6 @@
 import { ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
 
-const bgImage = require('../../assets/images/umastagram_background.png');
+const bgImage = require('../../assets/images/umastagram_background_2.png');
 
 export default function DMsPage() {
   return (

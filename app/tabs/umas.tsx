@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-const bgImage = require('../../assets/images/umastagram_background.png');
+const bgImage = require('../../assets/images/umastagram_background_2.png');
 
 interface Uma {
   id: number;

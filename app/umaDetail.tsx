@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Animated, Easing, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-const bgImage = require('../assets/images/umastagram_background.png');
+const bgImage = require('../assets/images/umastagram_background_2.png');
 
 interface UmaDetail {
   umaId: number;
@@ -331,6 +331,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3E9EC',
     marginTop: 20,
     marginBottom: 20,
+    borderRadius: 8,
   },
   mainLayout: {
     flexDirection: 'row',
