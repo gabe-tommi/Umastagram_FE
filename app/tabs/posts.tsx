@@ -7,7 +7,7 @@ import { storage } from "../../lib/storage";
 import { getPosts } from "../../postsAPI/postsAPI";
 // import { mockPosts } from "../../postsAPI/postsAPI";
 
-const bgImage = require('../../assets/images/umastagram_background.png_2');
+const bgImage = require('../../assets/images/umastagram_background_2.png');
 
 interface Post {
   id: number;

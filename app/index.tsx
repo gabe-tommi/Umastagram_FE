@@ -81,9 +81,10 @@ export default function Index() {
   useEffect(() => {
     // Generate falling images with random shoe colors - snowfall effect
     const shoeImages = [
-      require('../assets/images/pinkshoe.png'),
-      require('../assets/images/yellowshoe.png'),
-      require('../assets/images/blueshoe.png'),
+      require('../assets/images/PINK_HORS_FINAL.png'),
+      require('../assets/images/GREEN_HORSE_FINAL.png'),
+      require('../assets/images/ORANGE_HORSE_FINAL.png'),
+      require('../assets/images/PURPLE_HORSE_FINAL.png'),
     ];
 
     const images = Array.from({ length: 50 }, (_, i) => ({
@@ -267,7 +268,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#148b01ff',
+    backgroundColor: '#F3E9EC',
   },
   fallingImageContainer: {
     position: 'absolute',
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     width: '100%',
     gap: 16,
-    backgroundColor: '#ffccdfff',
+    backgroundColor: '#f9d0de',
     padding: 32,
     borderRadius: 12,
     maxWidth: 650,
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
   },
   enterButton: {
     height: 50,
-    backgroundColor: '#4FBF1D',
+    backgroundColor: '#9ADB58',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#ffffffff',
     borderWidth: 3,
-    borderColor: '#4FBF1D',
+    borderColor: '#9ADB58',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
