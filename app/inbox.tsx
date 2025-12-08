@@ -119,7 +119,7 @@ export default function InboxPage() {
             {/* Back Button */}
             <TouchableOpacity
                 style={styles.backButton}
-                onPress={() => router.push('/')}
+                onPress={() => router.replace('/tabs/posts')}
             >
                 <Text style={styles.backButtonText}>← Back</Text>
             </TouchableOpacity>
