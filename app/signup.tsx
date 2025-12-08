@@ -206,8 +206,9 @@ export default function Index() {
 
       <View style={styles.content}>
         <View style={styles.innerContainer}>
-          <Text style={styles.title}>Umastagram</Text>
+          <Image source={require('../assets/images/Signup_Uma.png')} style={styles.logo} />
           
+            
           <TextInput 
               placeholder="Email"
               style={styles.input}
@@ -242,7 +243,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F3E9EC',
   },
   content: {
     flex: 1,
@@ -260,6 +261,12 @@ const styles = StyleSheet.create({
   fallingImageSize: {
     width: 60,
     height: 60,
+    resizeMode: 'contain',
+  },
+  logo: {
+    flex: 1,
+    width: '100%',
+    maxHeight: 80,
     resizeMode: 'contain',
   },
   innerContainer: {
@@ -297,9 +304,12 @@ const styles = StyleSheet.create({
   },
   input: { // taken from react native docs
     height: 40,
-    margin: 5,
+    margin: 12,
     borderWidth: 1,
     padding: 10,
+    backgroundColor: '#faf6f7',
+    color: '#603745',
+    borderColor: '#603745'
   },
   // Modal styles
   modalOverlay: {

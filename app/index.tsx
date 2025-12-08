@@ -333,6 +333,9 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    backgroundColor: '#faf6f7',
+    color: '#603745',
+    borderColor: '#603745'
   },
   // Modal styles
   modalOverlay: {
