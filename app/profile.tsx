@@ -9,15 +9,28 @@ import {
     ScrollView,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfilePage() {
-    const { username } = useLocalSearchParams<{ username: string }>();
+    const { friendName } = useLocalSearchParams<{ friendName: string }>();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<string[]>([]);
+    const [currentUsername, setCurrentUsername] = useState<string>('');
 
-    const fetchUserData = useCallback(async (username: string) => {
-        if (!username.trim()) {
+    // Get the current logged-in user's username
+    useEffect(() => {
+        const getCurrentUsername = async () => {
+            const username = await AsyncStorage.getItem('username');
+            if (username) {
+                setCurrentUsername(username);
+            }
+        };
+        getCurrentUsername();
+    }, []);
+
+    const fetchUserData = useCallback(async (friendName: string) => {
+        if (!friendName || !friendName.trim()) {
             setResults([]);
             return;
         }
@@ -26,7 +39,7 @@ export default function ProfilePage() {
         try {
             const res = await fetch(
                 `https://beuma-64bbab9df83e.herokuapp.com/user/getUserByUsername/${encodeURIComponent(
-                    username.trim()
+                    friendName.trim()
                 )}`
             );
             const data: string[] = await res.json();
@@ -38,9 +51,74 @@ export default function ProfilePage() {
         }
     }, []);
 
+    const sendFriendRequest = useCallback(async () => {
+        if (!currentUsername) {
+            Alert.alert('Error', 'You must be logged in to send friend requests');
+            return;
+        }
+
+        if (!friendName || !friendName.trim()) {
+            Alert.alert('Error', 'Invalid friend name');
+            return;
+        }
+
+        try {
+            console.log("Starting friend request process...");
+
+            // Get friend's userId
+            const res = await fetch(
+                `https://beuma-64bbab9df83e.herokuapp.com/user/getUserByUsername/${encodeURIComponent(
+                    friendName.trim()
+                )}`
+            );
+            const friendData = await res.json();
+            console.log("Friend data received:", friendData);
+            const friendId = friendData[0];
+
+            // Get current user's userId
+            const currentUserRes = await fetch(
+                `https://beuma-64bbab9df83e.herokuapp.com/user/getUserByUsername/${encodeURIComponent(
+                    currentUsername.trim()
+                )}`
+            );
+            const currentUserData = await currentUserRes.json();
+            console.log("Current user data received:", currentUserData);
+            const userId = currentUserData[0];
+
+            console.log("Sending request with userId:", userId, "friendId:", friendId);
+
+            // Send friend request
+            const requestRes = await fetch(
+                `https://beuma-64bbab9df83e.herokuapp.com/api/friends/sendFriendRequest/${userId}/${friendId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+
+            console.log("Request response status:", requestRes.status);
+            const responseText = await requestRes.text();
+            console.log("Response text:", responseText);
+
+            if (requestRes.ok) {
+                Alert.alert('Success', 'Friend request sent!');
+            } else {
+                Alert.alert('Error', responseText || 'Failed to send friend request');
+            }
+
+        } catch (err) {
+            console.error('Error sending friend request:', err);
+            Alert.alert('Error', String(err));
+        }
+    }, [friendName, currentUsername]);
+
     useEffect(() => {
-        fetchUserData(username);
-    }, [username, fetchUserData]);
+        if (friendName) {
+            fetchUserData(friendName);
+        }
+    }, [friendName, fetchUserData]);
 
     if (loading) {
         return (
@@ -67,11 +145,11 @@ export default function ProfilePage() {
                     <View style={styles.avatarContainer}>
                         <View style={styles.avatar}>
                             <Text style={styles.avatarText}>
-                                {username?.charAt(0).toUpperCase()}
+                                {friendName?.charAt(0).toUpperCase()}
                             </Text>
                         </View>
                     </View>
-                    <Text style={styles.username}>{username}</Text>
+                    <Text style={styles.username}>{friendName}</Text>
                 </View>
 
                 {/* Profile Details Card */}
@@ -108,7 +186,7 @@ export default function ProfilePage() {
                 {/* Action Button */}
                 <TouchableOpacity
                     style={styles.friendButton}
-                    onPress={() => Alert.alert("Friend Request", "Feature coming soon!")}
+                    onPress={sendFriendRequest}
                 >
                     <Text style={styles.friendButtonText}>Send Friend Request</Text>
                 </TouchableOpacity>

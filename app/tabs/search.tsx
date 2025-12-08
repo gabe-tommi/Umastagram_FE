@@ -33,9 +33,8 @@ export default function SearchPage(): JSX.Element {
         }
     };
 
-    function profileSelect(username: string): void {
-        // @ts-ignore
-        router.replace(`/profile?username=${username}`, {username: username});
+    function profileSelect(friendName: string): void {
+        router.replace(`/profile?friendName=${friendName}`);
     }
 
     const renderItem = ({item}: { item: string }) => (
