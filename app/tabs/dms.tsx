@@ -1,22 +1,70 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { useState, useEffect } from 'react';
+import { storage } from '../../lib/storage';
 
 export default function DMsPage() {
+
+  const [username, setUsername] = useState('');
+  const [results, setResults] = useState<string[]>([]);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+
+  const loadUserData = async () => {
+    const auth = await storage.getAuth();
+    if (auth?.username) {
+      setUsername(auth.username);
+    }
+    getUserFollowers(auth?.username || '');
+  };
+
+  const getUserFollowers = async (username: string) => {
+    try {
+      // First, get current user's Id
+      const currentUserRes = await fetch(
+          `https://beuma-64bbab9df83e.herokuapp.com/user/getUserByUsername/${encodeURIComponent(
+              username.trim()
+          )}`
+      );
+      const currentUserData = await currentUserRes.json();
+      console.log("Current user data received:", currentUserData);
+      const userId = currentUserData[0];
+
+      const res = await fetch(`https://beuma-64bbab9df83e.herokuapp.com/api/friends/getUserFollowers/${encodeURIComponent(userId.trim())}`);
+      const data: string[] = await res.json();
+      console.log("Followers data received:", data);
+      setResults(data);
+    } catch (err) {
+      console.error('getUserFollowersError', String(err));
+    }
+  }
+
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Messages</Text>
-      </View>
-      <View style={styles.content}>
-        <Text style={styles.welcomeText}>Your Messages</Text>
-        <Text style={styles.subtitle}>Connect with friends and start conversations</Text>
-        
-        {/* Placeholder for messages */}
-        <View style={styles.messagesPlaceholder}>
-          <Text style={styles.placeholderText}>No messages yet...</Text>
-          <Text style={styles.placeholderSubtext}>Start a conversation with someone!</Text>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Your Friends</Text>
         </View>
-      </View>
-    </ScrollView>
+        <View style={styles.content}>
+          {results.length > 0 ? (
+              results.map((friendUsername, index) => (
+                  <TouchableOpacity
+                      key={index}
+                      style={styles.friendButton}
+                      onPress={() => {}}
+                  >
+                    <Text style={styles.friendButtonText}>{friendUsername}</Text>
+                  </TouchableOpacity>
+              ))
+          ) : (
+              <View style={styles.messagesPlaceholder}>
+                <Text style={styles.placeholderText}>No friends yet...</Text>
+                <Text style={styles.placeholderSubtext}>Start following people to see them here!</Text>
+              </View>
+          )}
+        </View>
+      </ScrollView>
   );
 }
 
@@ -41,16 +89,22 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  welcomeText: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#333',
+  friendButton: {
+    backgroundColor: '#007AFF',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  subtitle: {
+  friendButtonText: {
+    color: '#fff',
     fontSize: 16,
-    color: '#666',
-    marginBottom: 32,
+    fontWeight: '600',
   },
   messagesPlaceholder: {
     padding: 40,

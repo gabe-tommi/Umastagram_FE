@@ -20,20 +20,17 @@ export default function InboxPage() {
     const [results, setResults] = useState<string[]>([]);
     const [userId, setUserId] = useState<number | null>(null);
 
-
     useEffect(() => {
         loadUserData();
     }, []);
 
-    useEffect(() => {
-        getActiveFriendRequests(username);
-    }, []);
 
     const loadUserData = async () => {
         const auth = await storage.getAuth();
         if (auth?.username) {
             setUsername(auth.username);
         }
+        getActiveFriendRequests(auth?.username || '');
     };
 
     const getActiveFriendRequests = async (username:string) => {
@@ -52,7 +49,7 @@ export default function InboxPage() {
 
             // Now, get active friend requests for that userId
             const activeFriendReqsRes = await fetch(
-                `https://beuma-64bbab9df83e.herokuapp.com/api/friends/getUserFollowers/${userId}`
+                `https://beuma-64bbab9df83e.herokuapp.com/api/friends/getUserFriendRequests/${userId}`
             );
             const activeFriendReqsData: string[] = await activeFriendReqsRes.json();
             console.log("Active friend requests data received:", activeFriendReqsData);
@@ -84,7 +81,13 @@ export default function InboxPage() {
                     method: 'POST',
                 }
             );
+            
+            await fetch(`https://beuma-64bbab9df83e.herokuapp.com/api/friends/deleteFriendRequest/${friendId}/${userId}`),{
+                method: 'DELETE',
+            };
+            
             if (acceptRes.ok) {
+                
                 Alert.alert('Success', `You are now friends with ${friendName}`);
                 // Refresh friend requests list
                 getActiveFriendRequests(username);
@@ -104,7 +107,9 @@ export default function InboxPage() {
             <View style={styles.avatarSmall}>
                 <Text style={styles.avatarSmallText}>{item.charAt(0).toUpperCase()}</Text>
             </View>
-            <Text style={styles.resultText}>{item}</Text>
+            <Text style={styles.resultText}>
+                <Text style={styles.itemText}>{item}  </Text>wants to be friends!
+            </Text>
             <Text style={styles.chevron}>›</Text>
         </TouchableOpacity>
     );
@@ -269,5 +274,10 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: '#C7C7CC',
         fontWeight: '300',
+    },
+    itemText: {
+        color: '#007AFF', // or whatever color you want
+        fontWeight: 'bold', // optional
+        fontSize: 24
     },
 });
