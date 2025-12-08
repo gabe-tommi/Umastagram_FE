@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ImageBackground, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { storage } from '../../lib/storage';
 
-const bgImage = require('../../assets/images/umastagram_background.png');
+const bgImage = require('../../assets/images/umastagram_background_2.png');
 
 export default function AccountPage() {
   const router = useRouter();
