@@ -1,6 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+
+const bgImage = require('../../assets/images/umastagram_background.png');
 
 interface Uma {
   id: number;
@@ -91,6 +93,7 @@ export default function UmasScreen() {
   }
 
   return (
+    <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="contain">
     <View style={styles.container}>
       <Text style={styles.title}>Uma Characters</Text>
       <View style={styles.searchContainer}>
@@ -123,14 +126,24 @@ export default function UmasScreen() {
         scrollEnabled={true}
       />
     </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: '#F3E9EC',
+  },
+  bgImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
     paddingTop: 16,
+    backgroundColor: 'transparent',
   },
   title: {
     fontSize: 24,
@@ -151,7 +164,6 @@ const styles = StyleSheet.create({
   },
   umaCard: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
     borderRadius: 12,
     marginVertical: 8,
     overflow: 'hidden',

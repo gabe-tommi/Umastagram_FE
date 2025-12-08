@@ -1,11 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ImageBackground, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { storage } from "../../lib/storage";
 import { getPosts } from "../../postsAPI/postsAPI";
 // import { mockPosts } from "../../postsAPI/postsAPI";
+
+const bgImage = require('../../assets/images/umastagram_background.png');
 
 interface Post {
   id: number;
@@ -89,6 +91,12 @@ export default function PostsPage() {
   };
 
   return (
+    <ImageBackground
+      source={bgImage}
+      style={styles.background}
+      imageStyle={styles.bgImage}
+      resizeMode="contain"
+    >
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Umastagram</Text>
@@ -189,19 +197,29 @@ export default function PostsPage() {
         )}
       </View>
     </ScrollView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: '#F3E9EC',
+  },
+  bgImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   },
   header: {
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
   title: {
     fontSize: 24,
@@ -221,7 +239,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'rgba(245, 245, 245, 0.9)',
     padding: 16,
     borderRadius: 8,
     marginBottom: 20,

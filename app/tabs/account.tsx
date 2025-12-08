@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ImageBackground, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { storage } from '../../lib/storage';
+
+const bgImage = require('../../assets/images/umastagram_background.png');
 
 export default function AccountPage() {
   const router = useRouter();
@@ -90,6 +92,7 @@ export default function AccountPage() {
   };
 
   return (
+    <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="contain">
     <View style={styles.container}>
       {/* Custom Modal */}
       <Modal
@@ -152,19 +155,29 @@ export default function AccountPage() {
         </View>
       </ScrollView>
     </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: '#F3E9EC',
+  },
+  bgImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   },
   header: {
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
   title: {
     fontSize: 24,

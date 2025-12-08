@@ -3,6 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Animated, Easing, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+
 interface UmaDetail {
   umaId: number;
   umaName: string;
@@ -33,6 +34,7 @@ interface HorseDetail {
 }
 
 export default function UmaDetailScreen() {
+  
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const [uma, setUma] = useState<UmaDetail | null>(null);
@@ -256,7 +258,6 @@ export default function UmaDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   errorContainer: {
     flex: 1,
