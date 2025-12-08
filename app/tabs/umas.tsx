@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   bgImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'repeat'
   },
   container: {
     flex: 1,
