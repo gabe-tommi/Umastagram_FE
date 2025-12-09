@@ -8,12 +8,12 @@ export default function TabsLayout() {
         headerShown: false,
         headerTitleAlign: 'center',
         tabBarStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: '#fdfbfb',
           borderTopWidth: 1,
-          borderTopColor: '#e0e0e0',
+          borderTopColor:  '#fdfbfb',
         },
-        tabBarActiveTintColor: '#007AFF',
-        tabBarInactiveTintColor: '#8E8E93',
+        tabBarActiveTintColor: '#9ADB58',
+        tabBarInactiveTintColor: '#603745',
       }}>
       <Tabs.Screen
         name="posts"
@@ -52,6 +52,16 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="search" size={size} color={color} />
+            ),
+        }}
+        />
+    <Tabs.Screen
+        name="umas"
+        options={{
+          title: 'Umas',
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="paw" size={size} color={color} />
           ),
         }}
       />

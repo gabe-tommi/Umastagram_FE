@@ -1,11 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ImageBackground, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { storage } from "../../lib/storage";
 import { getPosts } from "../../postsAPI/postsAPI";
 // import { mockPosts } from "../../postsAPI/postsAPI";
+
+const bgImage = require('../../assets/images/umastagram_background_2.png');
 
 interface Post {
   id: number;
@@ -89,6 +91,12 @@ export default function PostsPage() {
   };
 
   return (
+    <ImageBackground
+      source={bgImage}
+      style={styles.background}
+      imageStyle={styles.bgImage}
+      resizeMode="cover"
+    >
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Umastagram</Text>
@@ -119,7 +127,7 @@ export default function PostsPage() {
         {/* Loading State */}
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#007AFF" />
+            <ActivityIndicator size="large" color="#9ADB58" />
             <Text style={styles.loadingText}>Loading posts...</Text>
           </View>
         ) : posts.length === 0 ? (
@@ -133,7 +141,7 @@ export default function PostsPage() {
             <View style={styles.postHeader}>
               <View style={styles.userInfo}>
                 <View style={styles.avatar}>
-                  <Ionicons name="person-circle" size={40} color="#007AFF" />
+                  <Ionicons name="person-circle" size={40} color="#9ADB58" />
                 </View>
                 <View>
                   <Text style={styles.username}>User #{post.userId}</Text>
@@ -151,7 +159,7 @@ export default function PostsPage() {
                 {loadingImages.has(post.id) && (
                   <ActivityIndicator 
                     size="large" 
-                    color="#007AFF" 
+                    color="#9ADB58" 
                     style={styles.loadingSpinner}
                   />
                 )}
@@ -183,15 +191,15 @@ export default function PostsPage() {
                 <Ionicons
                   name={likedPosts.has(post.id) ? "heart" : "heart-outline"}
                   size={24}
-                  color={likedPosts.has(post.id) ? "#ff4444" : "#666"}
+                  color={likedPosts.has(post.id) ? "#ff4444" : "#603745"}
                 />
-                <Text style={[styles.actionText, { color: likedPosts.has(post.id) ? "#ff4444" : "#666" }]}>
+                <Text style={[styles.actionText, { color: likedPosts.has(post.id) ? "#ff4444" : "#603745" }]}>
                   {postsLikes[post.id]}
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.actionButton}>
-                <Ionicons name="chatbubble-outline" size={24} color="#666" />
+                <Ionicons name="chatbubble-outline" size={24} color="#603745" />
                 <Text style={styles.actionText}>Comment</Text>
               </TouchableOpacity>
             </View>
@@ -200,25 +208,33 @@ export default function PostsPage() {
         )}
       </View>
     </ScrollView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F3E9EC',
+    width: '100%',
+    height: '100%',
+  },
+  bgImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
   header: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    backgroundColor: '#fff',
+    borderBottomColor: '#F8F2F7',
+    backgroundColor: '#F8F2F7',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#333',
+    color: '#494647',
   },
   content: {
     padding: 12,
@@ -227,12 +243,13 @@ const styles = StyleSheet.create({
       alignSelf: 'center',
       width: '100%',
     }),
+    backgroundColor: '#ffffff',
   },
   makePostContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'rgba(245, 245, 245, 0.9)',
     padding: 16,
     borderRadius: 8,
     marginBottom: 20,
@@ -240,13 +257,13 @@ const styles = StyleSheet.create({
   makePostText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#603745',
   },
   makePostButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#9ADB58',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -269,7 +286,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+      color: '#603745',
   },
   timestamp: {
     fontSize: 12,
@@ -278,7 +295,7 @@ const styles = StyleSheet.create({
   },
   postText: {
     fontSize: 16,
-    color: '#333',
+    color: '#603745',
     marginBottom: 12,
     lineHeight: 22,
   },
@@ -316,7 +333,7 @@ const styles = StyleSheet.create({
   actionText: {
     marginLeft: 6,
     fontSize: 14,
-    color: '#666',
+    color: '#603745',
     fontWeight: '500',
   },
   loadingContainer: {

@@ -5,8 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7edf670-b27f-4777-92be-ed7c7369e736" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/tabs/umas.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/umaDetail.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/GREEN_HORSE_FINAL.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/ORANGE_HORSE_FINAL.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/PINK_HORS_FINAL.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/PURPLE_HORSE_FINAL.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/Signup_Uma.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/umastagram_background.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/umastagram_background_2.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/tabs/search.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/tabs/search.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/postMaker.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/postMaker.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/signup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/tabs/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/tabs/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/tabs/account.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/tabs/account.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/tabs/dms.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/tabs/dms.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/tabs/posts.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/tabs/posts.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +68,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;friendsearch&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#47 on Merging friendsearch&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/gabrielgallagher/Desktop/umastagram/Umastagram_FE&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -87,7 +102,7 @@
       <workItem from="1763066292621" duration="34058000" />
       <workItem from="1763517095993" duration="2189000" />
       <workItem from="1764711869528" duration="29506000" />
-      <workItem from="1765077714600" duration="31839000" />
+      <workItem from="1765077714600" duration="32367000" />
     </task>
     <servers />
   </component>

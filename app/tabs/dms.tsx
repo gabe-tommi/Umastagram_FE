@@ -1,6 +1,9 @@
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useState, useEffect } from 'react';
 import { storage } from '../../lib/storage';
+// import { ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
+
+const bgImage = require('../../assets/images/umastagram_background_2.png');
 
 export default function DMsPage() {
 
@@ -65,19 +68,47 @@ export default function DMsPage() {
           )}
         </View>
       </ScrollView>
+    // <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="cover">
+    // <ScrollView style={styles.container}>
+    //   <View style={styles.header}>
+    //     <Text style={styles.title}>Messages</Text>
+    //   </View>
+    //   <View style={styles.content}>
+    //     <Text style={styles.welcomeText}>Your Messages</Text>
+    //     <Text style={styles.subtitle}>Connect with friends and start conversations</Text>
+    //    
+    //     {/* Placeholder for messages */}
+    //     <View style={styles.messagesPlaceholder}>
+    //       <Text style={styles.placeholderText}>No messages yet...</Text>
+    //       <Text style={styles.placeholderSubtext}>Start a conversation with someone!</Text>
+    //     </View>
+    //   </View>
+    // </ScrollView>
+    // </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: '#F3E9EC',
+    width: '100%',
+    height: '100%',
+  },
+  bgImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   },
   header: {
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
   title: {
     fontSize: 24,
