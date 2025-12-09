@@ -9,10 +9,9 @@ const bgImage = require('../../assets/images/umastagram_background_2.png');
 export default function AccountPage() {
   const router = useRouter();
   const [username, setUsername] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalTitle, setModalTitle] = useState('Set Your Username!');
+  const [usernameModalVisible, setUsernameModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  const [onModalClose, setOnModalClose] = useState<(() => void) | null>(null);
   const [modalUsername, setModalUsername] = useState('');
 
   useEffect(() => {
@@ -26,17 +25,14 @@ export default function AccountPage() {
     }
   };
 
-  const showAlert = (title: string, message: string, onOk?: () => void) => {
-    setModalTitle(title);
-    setModalMessage(message);
-    setOnModalClose(() => onOk || null);
-    setModalVisible(true);
+  const deleteAccount = () => {
+    setDeleteModalVisible(true);
   };
 
-  const deleteAccount = async () => {
+  const performAccountDeletion = async () => {
     try {
       const response = await fetch('https://beuma-64bbab9df83e.herokuapp.com/user/delete', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -48,22 +44,21 @@ export default function AccountPage() {
       console.log('Response from account deletion:', data);
       if (response.ok) {
         console.log('Account deleted successfully');
-        showAlert('Success', 'Your account has been deleted.', async () => {
-          await storage.clearAuth();
-          router.replace('/');
-        });
+        setDeleteModalVisible(false);
+        await storage.clearAuth();
+        router.replace('/');
       } else {
-        showAlert('Error', data.error || 'An error occurred while deleting the account.');
+        setModalMessage(data.error || 'An error occurred while deleting the account.');
       }
     } catch (error) {
-      showAlert('Error', 'An error occurred while deleting the account.');
+      setModalMessage('An error occurred while deleting the account.');
     }
   };
   
   const handleChangeUsername = () => {
-    showAlert('Change Username', 'Enter your new username below:', () => {
-      setModalVisible(false);
-    });
+    setModalMessage('');
+    setModalUsername('');
+    setUsernameModalVisible(true);
   };
 
   const handleModalClose = async () => {
@@ -100,11 +95,8 @@ export default function AccountPage() {
         
         setUsername(data.username); // Update display immediately
         setModalUsername('');
-        showAlert('Success', 'Username changed!');
-        setModalVisible(false);
-        if (onModalClose) {
-          onModalClose();
-        }
+        setModalMessage('');
+        setUsernameModalVisible(false);
       } else {
         setModalMessage(data.error || 'An error occurred while changing username.');
       }
@@ -121,34 +113,94 @@ export default function AccountPage() {
   return (
     <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="cover">
     <View style={styles.container}>
-      {/* Custom Modal */}
+      {/* Username Change Modal */}
       <Modal
         animationType="fade"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        visible={usernameModalVisible}
+        onRequestClose={() => setUsernameModalVisible(false)}
       >
         <TouchableOpacity 
           style={styles.modalOverlay} 
           activeOpacity={1}
-          onPress={() => setModalVisible(false)}
+          onPress={() => setUsernameModalVisible(false)}
         >
           <TouchableOpacity 
             style={styles.modalContent}
             activeOpacity={1}
             onPress={(e) => e.stopPropagation()}
           >
-            <Text style={styles.modalTitle}>{modalTitle}</Text>
-            <Text style={styles.modalMessage}>{modalMessage}</Text>
+            <Text style={styles.modalTitle}>Change Username</Text>
+            {modalMessage ? (
+              <Text style={styles.modalMessage}>{modalMessage}</Text>
+            ) : (
+              <Text style={styles.modalMessage}>Enter your new username below:</Text>
+            )}
             <TextInput
               style={styles.input}
               value={modalUsername}
               onChangeText={setModalUsername}
               placeholder="Enter your username"
             />
-            <TouchableOpacity style={styles.modalButton} onPress={handleModalClose}>
-              <Text style={styles.modalButtonText}>OK</Text>
-            </TouchableOpacity>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.modalButtonCancel]} 
+                onPress={() => {
+                  setUsernameModalVisible(false);
+                  setModalMessage('');
+                  setModalUsername('');
+                }}
+              >
+                <Text style={styles.modalButtonTextCancel}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.modalButton} onPress={handleModalClose}>
+                <Text style={styles.modalButtonText}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* Account Deletion Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={deleteModalVisible}
+        onRequestClose={() => setDeleteModalVisible(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay} 
+          activeOpacity={1}
+          onPress={() => setDeleteModalVisible(false)}
+        >
+          <TouchableOpacity 
+            style={styles.modalContent}
+            activeOpacity={1}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <Text style={styles.modalTitle}>Confirm Deletion</Text>
+            {modalMessage ? (
+              <Text style={styles.modalMessage}>{modalMessage}</Text>
+            ) : (
+              <Text style={styles.modalMessage}>Are you sure you want to delete your account? This action cannot be undone.</Text>
+            )}
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.modalButtonCancel]} 
+                onPress={() => {
+                  setDeleteModalVisible(false);
+                  setModalMessage('');
+                }}
+              >
+                <Text style={styles.modalButtonTextCancel}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.modalButtonDanger]} 
+                onPress={performAccountDeletion}
+              >
+                <Text style={styles.modalButtonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
@@ -323,11 +375,29 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 32,
     alignItems: 'center',
+    flex: 1,
+  },
+  modalButtonCancel: {
+    backgroundColor: '#f0f0f0',
+    marginRight: 8,
+  },
+  modalButtonDanger: {
+    backgroundColor: '#ff4444',
   },
   modalButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  modalButtonTextCancel: {
+    color: '#333',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 8,
   },
   input: { // taken from react native docs
     height: 40,
