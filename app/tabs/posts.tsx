@@ -113,6 +113,17 @@ export default function PostsPage() {
           </TouchableOpacity>
         </View>
 
+        {/* Go to Inbox Button */}
+        <View style={styles.inBoxContainer}>
+          <Text style={styles.inBoxText}>Check Inbox</Text>
+          <TouchableOpacity
+              style={styles.inBoxButton}
+              onPress={() => (router.push('../inbox'))}
+          >
+            <Ionicons name="arrow-forward" size={28} color="#fff" />
+          </TouchableOpacity>
+        </View>
+
         {/* Loading State */}
         {isLoading ? (
           <View style={styles.loadingContainer}>
@@ -343,5 +354,27 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 14,
     color: '#999',
+  },
+  inBoxContainer:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#f5f5f5',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  inBoxText:{
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
+  inBoxButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#007AFF',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
