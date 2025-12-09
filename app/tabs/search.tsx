@@ -1,4 +1,5 @@
-import React, {JSX, useState} from 'react';
+import React, { JSX, useState, useEffect } from 'react';
+import { storage } from '../../lib/storage';
 import {
     View,
     TextInput,
@@ -16,16 +17,32 @@ export default function SearchPage(): JSX.Element {
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<string[]>([]);
     const [hasSearched, setHasSearched] = useState(false);
+    const [currentUsername, setUsername] = useState('');
+
+
+    useEffect(() => {
+        loadUserData();
+    }, []);
+
+    const loadUserData = async () => {
+        const auth = await storage.getAuth();
+        if (auth?.username) {
+            setUsername(auth.username);
+        }
+    };
 
     const handleSearch = async () => {
         if (!query.trim()) return;
         setLoading(true);
         setHasSearched(true);
         setResults([]);
+
         try {
             const res = await fetch(`https://beuma-64bbab9df83e.herokuapp.com/user/userSearch/${encodeURIComponent(query.trim())}`);
             const data: string[] = await res.json();
-            setResults(data);
+            // Filter out only exact matches of current user
+            const filteredResults = data.filter(username => username !== currentUsername);
+            setResults(filteredResults);
         } catch (err) {
             Alert.alert('Search error', String(err));
         } finally {
