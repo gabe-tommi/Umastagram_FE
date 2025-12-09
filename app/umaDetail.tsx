@@ -328,10 +328,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '40%',
     height: 350,
-    backgroundColor: '#F3E9EC',
     marginTop: 20,
     marginBottom: 20,
-    borderRadius: 8,
+    borderRadius: 70,
   },
   mainLayout: {
     flexDirection: 'row',

@@ -94,8 +94,8 @@ export default function UmasScreen() {
 
   return (
     <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="cover">
-    <View style={styles.container}>
       <Text style={styles.title}>Uma Characters</Text>
+        <Text style = {styles.infoText}>Welcome to the Uma page. Explore and learn about your favorite Uma characters and their real life counterparts here.</Text>
       <View style={styles.searchContainer}>
         <TextInput
           value={query}
@@ -125,7 +125,6 @@ export default function UmasScreen() {
         contentContainerStyle={styles.listContent}
         scrollEnabled={true}
       />
-    </View>
     </ImageBackground>
   );
 }
@@ -151,6 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#603745',
+    marginTop: 30,
     marginLeft: 16,
     marginBottom: 16,
   },
@@ -245,5 +245,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  infoText: {
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+    fontSize: 20,
+    color: '#603745',
+    marginBottom: 20,
+    marginLeft: 20,
   },
 });
