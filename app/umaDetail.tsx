@@ -158,7 +158,7 @@ export default function UmaDetailScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#4FBF1D" />
+        <ActivityIndicator size="large" color="#9ADB58" />
       </View>
     );
   }
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   retryButton: {
-    backgroundColor: '#4FBF1D',
+    backgroundColor: '#9ADB58',
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 8,

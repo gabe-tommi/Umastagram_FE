@@ -100,14 +100,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#333',
+    color: '#603745',
   },
   content: {
     flex: 1,
     padding: 16,
   },
   friendButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#9ADB58',
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   placeholderText: {
     fontSize: 18,
     fontWeight: '500',
-    color: '#666',
+    color: '#603745',
     marginBottom: 8,
   },
   placeholderSubtext: {

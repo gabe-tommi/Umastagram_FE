@@ -1,17 +1,17 @@
-import React, { JSX, useState, useEffect } from 'react';
-import { storage } from '../../lib/storage';
+import { router } from "expo-router";
+import React, { JSX, useEffect, useState } from 'react';
 import {
-    ImageBackground,
-    View,
-    TextInput,
-    FlatList,
-    Text,
-    TouchableOpacity,
     ActivityIndicator,
     Alert,
-    StyleSheet
+    FlatList,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
-import {router} from "expo-router";
+import { storage } from '../../lib/storage';
 
 const bgImage = require('../../assets/images/umastagram_background_2.png');
 
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 8,
-        backgroundColor: "#fff",
+        backgroundColor: "#faf6f7",
         marginBottom: 16,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     },
     backButtonText: {
         fontSize: 16,
-        color: "#007AFF",
+        color: "#9ADB58",
         fontWeight: "600",
     },
     header: {
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#faf6f7',
         borderWidth: 1,
         borderColor: '#E8ECF2',
         padding: 14,
@@ -210,18 +210,18 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     searchButton: {
-        backgroundColor: '#007AFF',
+        backgroundColor: '#9ADB58',
         paddingVertical: 14,
         paddingHorizontal: 24,
         borderRadius: 12,
-        shadowColor: "#007AFF",
+        shadowColor: "#9ADB58",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 3,
     },
     searchButtonText: {
-        color: '#fff',
+        color: '#faf6f7',
         fontSize: 16,
         fontWeight: '600',
     },
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     resultCard: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#faf6f7',
         paddingVertical: 14,
         paddingHorizontal: 16,
         borderRadius: 12,
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
         borderRadius: 22,
-        backgroundColor: '#007AFF',
+        backgroundColor: '#9ADB58',
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 12,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     avatarSmallText: {
         fontSize: 18,
         fontWeight: '600',
-        color: '#fff',
+        color: '#faf6f7',
     },
     resultText: {
         flex: 1,
