@@ -1,6 +1,7 @@
 import React, { JSX, useState, useEffect } from 'react';
 import { storage } from '../../lib/storage';
 import {
+    ImageBackground,
     View,
     TextInput,
     FlatList,
@@ -8,9 +9,11 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Alert,
-    StyleSheet,
+    StyleSheet
 } from 'react-native';
 import {router} from "expo-router";
+
+const bgImage = require('../../assets/images/umastagram_background_2.png');
 
 export default function SearchPage(): JSX.Element {
     const [query, setQuery] = useState('');
@@ -65,6 +68,7 @@ export default function SearchPage(): JSX.Element {
     );
 
     return (
+        <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="cover">
         <View style={styles.container}>
             {/* Back Button */}
             <TouchableOpacity
@@ -140,14 +144,26 @@ export default function SearchPage(): JSX.Element {
                 showsVerticalScrollIndicator={false}
             />
         </View>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
+    background: {
+        flex: 1,
+        backgroundColor: '#F3E9EC',
+        width: '100%',
+        height: '100%',
+    },
+    bgImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'repeat',
+    },
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#F5F7FA',
+        backgroundColor: 'transparent',
     },
     backButton: {
         alignSelf: "flex-start",

@@ -23,7 +23,7 @@ export default function AccountPage() {
     if (auth?.username) {
       setUsername(auth.username);
     }
-  };
+  }; 
 
   const deleteAccount = () => {
     setDeleteModalVisible(true);
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   bgImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'repeat',
   },
   container: {
     flex: 1,

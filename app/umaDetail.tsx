@@ -289,15 +289,15 @@ export default function UmaDetailScreen() {
 
 const styles = StyleSheet.create({
   background: {
-  flex: 1,
-  backgroundColor: '#F3E9EC',
-  width: '100%',
-  height: '100%',
+    flex: 1,
+    backgroundColor: '#F3E9EC',
+    width: '100%',
+    height: '100%',
   },
   bgImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'repeat',
   },
   container: {
     flex: 1,
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   },
   heroImage: {
     width: '20%',
-    height: 500,
+    height: 800,
     backgroundColor: '#F3E9EC',
   },
   heroImageBottom: {
@@ -396,6 +396,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     elevation: 2,
     boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+    
   },
   sectionTitle: {
     fontSize: 18,

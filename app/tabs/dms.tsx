@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { ImageBackground, ScrollView, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useState, useEffect } from 'react';
 import { storage } from '../../lib/storage';
 // import { ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -45,6 +45,8 @@ export default function DMsPage() {
   }
 
   return (
+      <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="cover">
+
       <ScrollView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Your Friends</Text>
@@ -68,23 +70,7 @@ export default function DMsPage() {
           )}
         </View>
       </ScrollView>
-    // <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="cover">
-    // <ScrollView style={styles.container}>
-    //   <View style={styles.header}>
-    //     <Text style={styles.title}>Messages</Text>
-    //   </View>
-    //   <View style={styles.content}>
-    //     <Text style={styles.welcomeText}>Your Messages</Text>
-    //     <Text style={styles.subtitle}>Connect with friends and start conversations</Text>
-    //    
-    //     {/* Placeholder for messages */}
-    //     <View style={styles.messagesPlaceholder}>
-    //       <Text style={styles.placeholderText}>No messages yet...</Text>
-    //       <Text style={styles.placeholderSubtext}>Start a conversation with someone!</Text>
-    //     </View>
-    //   </View>
-    // </ScrollView>
-    // </ImageBackground>
+     </ImageBackground>
   );
 }
 
@@ -98,7 +84,7 @@ const styles = StyleSheet.create({
   bgImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'repeat',
   },
   container: {
     flex: 1,
