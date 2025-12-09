@@ -30,6 +30,33 @@ export default function AccountPage() {
     setOnModalClose(() => onOk || null);
     setModalVisible(true);
   };
+
+  const deleteAccount = async () => {
+    try {
+      const response = await fetch('https://beuma-64bbab9df83e.herokuapp.com/user/delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: (await storage.getAuth())?.token,
+        }),
+      });
+      const data = await response.json();
+      console.log('Response from account deletion:', data);
+      if (response.ok) {
+        console.log('Account deleted successfully');
+        showAlert('Success', 'Your account has been deleted.', async () => {
+          await storage.clearAuth();
+          router.replace('/');
+        });
+      } else {
+        showAlert('Error', data.error || 'An error occurred while deleting the account.');
+      }
+    } catch (error) {
+      showAlert('Error', 'An error occurred while deleting the account.');
+    }
+  };
   
   const handleChangeUsername = () => {
     showAlert('Change Username', 'Enter your new username below:', () => {
@@ -146,6 +173,11 @@ export default function AccountPage() {
             <TouchableOpacity style={styles.settingItem} onPress={handleLogout}>
               <Ionicons name="log-out-outline" size={24} />
               <Text style={[styles.settingText, { color: '#ff4444' }]}>Sign Out</Text>
+              <Ionicons name="chevron-forward" size={20}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.settingItem} onPress={deleteAccount}>
+              <Ionicons name="trash-outline" size={24} />
+              <Text style={[styles.settingText, { color: '#ff4444' }]}>Delete Account</Text>
               <Ionicons name="chevron-forward" size={20}/>
             </TouchableOpacity>
           </View>
