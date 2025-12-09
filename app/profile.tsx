@@ -1,17 +1,18 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import {
+    ActivityIndicator,
     Alert,
+    ImageBackground,
+    ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
-    View,
-    ActivityIndicator,
-    ScrollView,
+    View
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { storage } from '../lib/storage';
 
+const bgImage = require('../assets/images/umastagram_background_2.png');
 
 export default function ProfilePage() {
     const { friendName } = useLocalSearchParams<{ friendName: string }>();
@@ -125,13 +126,14 @@ export default function ProfilePage() {
     if (loading) {
         return (
             <View style={styles.centerContainer}>
-                <ActivityIndicator size="large" color="#007AFF" />
+                <ActivityIndicator size="large" color="#9ADB58" />
                 <Text style={styles.loadingText}>Loading profile...</Text>
             </View>
         );
     }
 
     return (
+        <ImageBackground source={bgImage} style={styles.background} imageStyle={styles.bgImage} resizeMode="cover">
         <ScrollView style={styles.container}>
             <View style={styles.content}>
                 {/* Back Button */}
@@ -194,13 +196,24 @@ export default function ProfilePage() {
                 </TouchableOpacity>
             </View>
         </ScrollView>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
+    background: {
+    flex: 1,
+    backgroundColor: '#F3E9EC',
+    width: '100%',
+    height: '100%',
+    },
+    bgImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'repeat',
+    },
     container: {
         flex: 1,
-        backgroundColor: "#F5F7FA",
     },
     centerContainer: {
         flex: 1,
@@ -231,7 +244,7 @@ const styles = StyleSheet.create({
     },
     backButtonText: {
         fontSize: 16,
-        color: "#007AFF",
+        color: "#9ADB58",
         fontWeight: "600",
     },
     profileHeader: {
@@ -246,7 +259,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 50,
-        backgroundColor: "#007AFF",
+        backgroundColor: "#9ADB58",
         justifyContent: "center",
         alignItems: "center",
         shadowColor: "#000",
@@ -263,7 +276,7 @@ const styles = StyleSheet.create({
     username: {
         fontSize: 28,
         fontWeight: "700",
-        color: "#1A1A1A",
+        color: "#603745",
     },
     card: {
         backgroundColor: "#fff",
@@ -279,7 +292,7 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: 18,
         fontWeight: "600",
-        color: "#1A1A1A",
+        color: "#603745",
         marginBottom: 20,
     },
     infoRow: {
@@ -310,7 +323,7 @@ const styles = StyleSheet.create({
     },
     infoValue: {
         fontSize: 16,
-        color: "#1A1A1A",
+        color: "#603745",
         fontWeight: "400",
     },
     divider: {
@@ -319,12 +332,12 @@ const styles = StyleSheet.create({
         marginVertical: 16,
     },
     friendButton: {
-        backgroundColor: "#007AFF",
+        backgroundColor: "#9ADB58",
         paddingVertical: 16,
         paddingHorizontal: 24,
         borderRadius: 12,
         alignItems: "center",
-        shadowColor: "#007AFF",
+        shadowColor: "#9ADB58",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,

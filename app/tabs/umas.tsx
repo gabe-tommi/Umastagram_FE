@@ -76,7 +76,7 @@ export default function UmasScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#4FBF1D" />
+        <ActivityIndicator size="large" color="#9ADB58" />
       </View>
     );
   }
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
-    backgroundColor: '#fff',
+    backgroundColor: '#faf6f7',
     borderRadius: 8,
     paddingHorizontal: 12,
     fontSize: 14,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     marginLeft: 8,
-    backgroundColor: '#4FBF1D',
+    backgroundColor: '#9ADB58',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   retryButton: {
-    backgroundColor: '#4FBF1D',
+    backgroundColor: '#9ADB58',
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 8,
