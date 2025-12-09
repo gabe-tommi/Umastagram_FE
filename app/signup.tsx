@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   logo: {
-    flex: 1,
+    // flex: 1,
     width: '100%',
     maxHeight: 80,
     resizeMode: 'contain',
