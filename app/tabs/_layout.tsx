@@ -46,6 +46,16 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="search"
+        options={{
+          title: 'Search',
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="search" size={size} color={color} />
+            ),
+        }}
+        />
+    <Tabs.Screen
         name="umas"
         options={{
           title: 'Umas',

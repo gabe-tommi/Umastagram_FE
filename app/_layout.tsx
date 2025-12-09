@@ -138,6 +138,14 @@ export default function RootLayout() {
         name="signup"
         options={{ animation: 'fade' }}
       />
+      <Stack.Screen
+        name="profile"
+        options={{ animation: 'fade' }}
+      />
+      <Stack.Screen
+          name="inbox"
+          options={{ animation: 'fade' }}
+      />
     </Stack>
   );
 }
